@@ -46,7 +46,7 @@ server by `firestore.rules`:
 
 The free plan allows 50,000 reads and 20,000 writes a day, enough for a team of 10 screening thousands of papers.
 
-## One-time Firebase setup (already done for this project)
+## One-time Firebase setup
 
 1. Firebase console → **Authentication** → Sign-in method → enable **Google**.
    Settings → Authorized domains → add `mohamedhadyashry.github.io`.
