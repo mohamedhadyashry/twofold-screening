@@ -43,11 +43,12 @@ h2 { font: 600 20px/1.3 var(--sans); }
 h3 { font: 600 15px/1.3 var(--sans); }
 p { margin: 0; }
 .muted { color: var(--muted); }
+.small { font-size: 13px; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .label { font: 500 11px/1.2 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 
 header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
-.top .wrap { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding-block: 10px; }
+.top .wrap { display: flex; align-items: center; gap: 10px 20px; flex-wrap: wrap; padding-block: 10px; }
 .brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
 .brand b { font: 600 17px/1 var(--serif); letter-spacing: .01em; }
 .brand .proj { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
@@ -57,28 +58,33 @@ nav.tabs button:hover { color: var(--fg); background: var(--sunk); }
 nav.tabs button[aria-selected="true"] { color: var(--fg); background: var(--sunk); box-shadow: inset 0 -2px 0 var(--accent); }
 .count { font: 500 11px/1 var(--mono); background: var(--line); color: var(--fg); border-radius: 9px; padding: 3px 6px; }
 .count.warn { background: var(--may-soft); color: var(--may); }
-.who { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.who { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.who .name { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 main { padding-block: 20px 60px; }
 section.view { display: grid; gap: 18px; }
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
 .row { display: flex; gap: 8px 10px; flex-wrap: wrap; align-items: center; }
+.spread { justify-content: space-between; }
 .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
 
 button, .btn { font: 500 14px var(--sans); border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 6px; padding: 7px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 button:hover, .btn:hover { border-color: var(--muted); }
 button.primary, .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 button.danger { color: var(--exc); }
+button.link { border: 0; background: none; padding: 2px 4px; color: var(--accent); }
 button:disabled { opacity: .45; cursor: default; }
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
-input[type="text"], input[type="search"], select, textarea { font: 14px var(--sans); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; min-width: 0; }
+input[type="text"], input[type="email"], input[type="search"], input[type="number"], select, textarea { font: 14px var(--sans); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; min-width: 0; }
+input[type="number"] { width: 80px; }
 textarea { width: 100%; resize: vertical; }
-.btn input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .btn { position: relative; }
+.btn input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; }
 kbd { font: 500 11px var(--mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; color: var(--muted); }
+label.check { display: inline-flex; gap: 6px; align-items: center; }
 
-.drop { border: 2px dashed var(--line); border-radius: 8px; padding: 22px; text-align: center; display: grid; gap: 10px; justify-items: center; }
-.drop.over { border-color: var(--accent); background: var(--sunk); }
+.dropzone { border: 2px dashed var(--line); border-radius: 8px; padding: 22px; text-align: center; display: grid; gap: 10px; justify-items: center; }
+.dropzone.over { border-color: var(--accent); background: var(--sunk); }
 .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
 table { border-collapse: collapse; width: 100%; font-size: 13px; }
 th, td { text-align: left; padding: 6px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -95,7 +101,16 @@ td.clip { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-spa
 .pill.include { background: var(--inc-soft); color: var(--inc); }
 .pill.exclude { background: var(--exc-soft); color: var(--exc); }
 .pill.maybe { background: var(--may-soft); color: var(--may); }
-.pill.reason { background: var(--sunk); color: var(--fg); }
+.pill.lead { background: var(--accent); color: var(--accent-ink); }
+.bar { height: 6px; background: var(--sunk); border-radius: 3px; overflow: hidden; display: flex; min-width: 80px; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+
+/* Home */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.card { text-align: left; display: grid; gap: 8px; padding: 14px; border-radius: 8px; align-content: start; }
+.card .t { font: 600 16px/1.3 var(--serif); }
+.signin { max-width: 520px; margin: 40px auto; text-align: center; justify-items: center; }
+.signin h1 { font: 600 30px/1.2 var(--serif); }
 
 /* Screening */
 .screen { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 18px; align-items: start; }
@@ -115,7 +130,6 @@ td.clip { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-spa
 .dot.maybe { background: var(--may); border-color: var(--may); }
 .progress { height: 6px; background: var(--sunk); border-radius: 3px; overflow: hidden; display: flex; }
 .progress i { display: block; height: 100%; }
-
 .reader { display: grid; gap: 16px; min-width: 0; }
 .reader .rtitle { font: 600 22px/1.3 var(--serif); }
 .meta { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--muted); font-size: 13px; }
@@ -153,14 +167,19 @@ mark.e { background: var(--hl-exc); color: inherit; border-radius: 2px; padding:
 /* Compare */
 .conf { display: grid; gap: 8px; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
 .conf:last-child { border-bottom: 0; }
-.conf .ct { font: 600 15px/1.35 var(--serif); cursor: pointer; }
+.conf .ct { font: 600 15px/1.35 var(--serif); }
 .conf details summary { cursor: pointer; color: var(--accent); font-size: 13px; }
 .votes { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; }
+.finbtn.on-include { background: var(--inc); border-color: var(--inc); color: var(--surface); }
+.finbtn.on-exclude { background: var(--exc); border-color: var(--exc); color: var(--surface); }
 
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); padding: 9px 16px; border-radius: 6px; z-index: 20; font-size: 14px; max-width: calc(100% - 32px); }
 .confirm { border: 1px solid var(--exc); background: var(--exc-soft); border-radius: 6px; padding: 12px; display: grid; gap: 8px; }
+.note { border: 1px solid var(--may); background: var(--may-soft); border-radius: 6px; padding: 10px 12px; }
 .empty { text-align: center; padding: 40px 16px; display: grid; gap: 12px; justify-items: center; }
 .steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.copybox { display: flex; gap: 6px; min-width: 0; }
+.copybox input { flex: 1; font-family: var(--mono); font-size: 12px; }
 
 @media (max-width: 760px) {
   .screen { grid-template-columns: 1fr; }
@@ -177,89 +196,48 @@ mark.e { background: var(--hl-exc); color: inherit; border-radius: 2px; padding:
 <header class="top">
   <div class="wrap">
     <div class="brand"><b>Twofold</b><span class="proj" id="projName"></span></div>
-    <nav class="tabs" id="tabs" aria-label="Sections">
-      <button data-tab="import">Import</button>
-      <button data-tab="dups">Duplicates <span class="count" id="cDups" hidden></span></button>
-      <button data-tab="screen">Screen <span class="count" id="cScreen" hidden></span></button>
-      <button data-tab="compare">Compare <span class="count" id="cConf" hidden></span></button>
-      <button data-tab="export">Export</button>
-    </nav>
-    <div class="who">
-      <span class="label">Reviewer</span>
-      <input type="text" id="reviewerName" placeholder="Your name" size="12" aria-label="Your reviewer name">
-    </div>
+    <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+    <div class="who" id="who"></div>
   </div>
 </header>
-
-<main class="wrap">
-  <section class="view" id="view-import" hidden></section>
-  <section class="view" id="view-dups" hidden></section>
-  <section class="view" id="view-screen" hidden></section>
-  <section class="view" id="view-compare" hidden></section>
-  <section class="view" id="view-export" hidden></section>
-</main>
+<main class="wrap" id="main"><div class="panel empty"><p class="muted">Loading…</p></div></main>
 <div class="toast" id="toast" hidden></div>
 
+<script src="firebase-config.js"></script>
 <script>
 "use strict";
-/* ---------- state ---------- */
+const CONFIG = window.FIREBASE_CONFIG || null;
 const DEFAULT_REASONS = ["Wrong population", "Wrong intervention", "Wrong comparator", "Wrong outcome", "Wrong study design", "Wrong publication type", "Not in English", "No abstract / insufficient info", "Other"];
 const DEFAULT_KW = { inc: ["randomized", "randomised", "controlled trial", "cohort", "case-control"], exc: ["review", "case report", "mice", "rats", "animal", "in vitro", "protocol"] };
-function uid() { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); }
-function freshState() {
-  return { v: 1, projectId: uid(), name: "Untitled review", records: [], sources: [], dupPairs: [], removed: {}, notDup: {}, dupHistory: [],
-    reviewer: "", decisions: {}, others: {}, final: {}, keywords: JSON.parse(JSON.stringify(DEFAULT_KW)), reasons: DEFAULT_REASONS.slice(),
-    ui: { tab: "import", filter: "todo", cur: null, cmpA: null, cmpB: null, cmpFilter: "open" } };
-}
-let S = freshState();
-let byId = new Map();
-function reindex() { byId = new Map(S.records.map(r => [r.id, r])); }
-
-/* ---------- storage (IndexedDB, with in-memory fallback) ---------- */
-const store = {
-  db: null,
-  async open() {
-    if (this.db) return this.db;
-    this.db = await new Promise((res, rej) => {
-      const rq = indexedDB.open("twofold-screening", 1);
-      rq.onupgradeneeded = () => rq.result.createObjectStore("kv");
-      rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error);
-    });
-    return this.db;
-  },
-  async get(k) { try { const db = await this.open(); return await new Promise((res, rej) => { const rq = db.transaction("kv").objectStore("kv").get(k); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); }); } catch (e) { return null; } },
-  async set(k, v) { try { const db = await this.open(); await new Promise((res, rej) => { const tx = db.transaction("kv", "readwrite"); tx.objectStore("kv").put(v, k); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); } catch (e) { /* storage unavailable: keep working in memory */ } }
-};
-let saveTimer = null;
-function save(now) { clearTimeout(saveTimer); if (now) store.set("state", S); else saveTimer = setTimeout(() => { saveTimer = null; store.set("state", S); }, 250); }
-addEventListener("pagehide", () => { if (saveTimer) save(true); });
-document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden" && saveTimer) save(true); });
+const PART_BYTES = 700000; // stay well under Firestore's 1 MiB document limit
 
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
 function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]); }
-function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); }
+function toast(msg, ms) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, ms || 2800); }
 function fnv(str) { let h = 0x811c9dc5; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); } return (h >>> 0).toString(36); }
 function normTitle(t) { return (t || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/<[^>]+>/g, " ").replace(/[^a-z0-9]+/g, " ").trim(); }
 function normDoi(d) { return (d || "").toLowerCase().trim().replace(/^https?:\/\/(dx\.)?doi\.org\//, "").replace(/^doi:\s*/, "").trim(); }
 function yearOf(s) { const m = String(s || "").match(/\b(1[89]\d{2}|20\d{2})\b/); return m ? m[1] : ""; }
 function shortAuthors(a) { if (!a) return ""; const parts = a.split(/;|\s+and\s+|\|/).map(x => x.trim()).filter(Boolean); return parts.length > 2 ? parts[0] + " et al." : parts.join("; "); }
-function active() { return S.records.filter(r => !S.removed[r.id]); }
 function plural(n, w, p) { return n + " " + (n === 1 ? w : (p || w + "s")); }
-
-async function saveFile(filename, text) {
-  const viewer = window.claude && typeof window.claude.use === "function" ? await window.claude.use("downloads").catch(() => null) : null;
-  if (viewer) {
-    try { await viewer.save({ filename, data: text }); toast("Saved " + filename); }
-    catch (e) { if (e && e.code !== "declined") toast("Could not save the file here (" + (e.code || "error") + ")."); }
-    return;
-  }
+function slug(s) { return (s || "review").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "review"; }
+function readFile(file) { return new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = () => rej(fr.error); fr.readAsText(file); }); }
+function bytes(o) { return new TextEncoder().encode(JSON.stringify(o)).length; }
+function lsGet(k) { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* private mode */ } }
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function saveFile(filename, text) {
   const url = URL.createObjectURL(new Blob([text], { type: filename.endsWith(".csv") ? "text/csv" : "application/json" }));
   const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
-function slug(s) { return (s || "review").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "review"; }
-function readFile(file) { return new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = () => rej(fr.error); fr.readAsText(file); }); }
+function packParts(records) {
+  const parts = []; let cur = [], size = 0;
+  for (const r of records) { const s = bytes(r) + 2; if (cur.length && size + s > PART_BYTES) { parts.push(cur); cur = []; size = 0; } cur.push(r); size += s; }
+  if (cur.length) parts.push(cur);
+  return parts;
+}
 
 /* ---------- CSV ---------- */
 function parseCSV(text) {
@@ -280,7 +258,6 @@ function parseCSV(text) {
 }
 function csvCell(v) { v = String(v ?? ""); return /[",\n\r;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
 function toCSV(rows) { return "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n"); }
-
 const FIELDS = {
   title: { label: "Title", names: ["title", "article title", "document title", "ti", "primary title", "paper title"] },
   abstract: { label: "Abstract", names: ["abstract", "ab", "abstract note", "abstracts", "summary"] },
@@ -306,44 +283,259 @@ function autoMap(header) {
   return map;
 }
 
+/* ---------- app state ---------- */
+const FB = {};
+let me = null, authReady = false, fatal = "";
+let myProjects = null;            // home list
+let PID = null, P = null;         // open review and its main document
+let subs = [], ownerSubbed = false, revealSub = null, revealTries = 0;
+let R = [], byId = new Map(), loadedChunkV = null;            // lead only: every imported record
+let D = { dupPairs: [], removed: {}, notDup: {}, dupHistory: [] }; // lead only: duplicate decisions
+let A = null;                                                  // lead only: assignment plan {order, map, k}
+let FINAL = {};                                                // lead only: consensus decisions
+let OTHERS = {};                                               // lead only, when revealed: uid -> {name, email, d}
+let MY = [], myById = new Map(), myAssignV = null;             // my assigned papers
+let DEC = {};                                                  // my decisions
+let ui = { tab: "screen", filter: "todo", cur: null, cmpFilter: "open", search: "", listLimit: 200 };
+let pending = null, dupChoice = {}, busy = "";
+
+const isLead = () => !!(P && me && P.owner === me.uid);
+function reindex() { byId = new Map(R.map(r => [r.id, r])); }
+function activeRecords() { return R.filter(r => !D.removed[r.id]); }
+
+/* ---------- Firebase ---------- */
+const ref = {
+  proj: id => FB.doc(FB.D, "projects", id || PID),
+  projects: () => FB.collection(FB.D, "projects"),
+  chunks: () => FB.collection(FB.D, "projects", PID, "chunks"),
+  meta: n => FB.doc(FB.D, "projects", PID, "meta", n),
+  assign: e => FB.doc(FB.D, "projects", PID, "assign", e),
+  parts: e => FB.collection(FB.D, "projects", PID, "assign", e, "parts"),
+  decisions: () => FB.collection(FB.D, "projects", PID, "decisions"),
+  dec: uid => FB.doc(FB.D, "projects", PID, "decisions", uid)
+};
+function fail(e) {
+  console.error(e);
+  const code = e && e.code || "";
+  if (code === "permission-denied") toast("You don't have access to that. The lead must add your Google email to the review.", 5000);
+  else if (code === "unavailable") toast("You're offline. Changes will be saved when the connection is back.", 4000);
+  else toast("Something went wrong: " + (e && e.message || e), 5000);
+}
+async function boot() {
+  if (!CONFIG || !CONFIG.apiKey) { fatal = "Firebase settings are missing. Add them to firebase-config.js (see README)."; render(); return; }
+  const base = CONFIG.sdkBase || "https://www.gstatic.com/firebasejs/10.12.2/";
+  try {
+    const [app, auth, fs] = await Promise.all(["firebase-app.js", "firebase-auth.js", "firebase-firestore.js"].map(f => import(base + f)));
+    Object.assign(FB, auth, fs);
+    const a = app.initializeApp({ apiKey: CONFIG.apiKey, authDomain: CONFIG.authDomain, projectId: CONFIG.projectId, storageBucket: CONFIG.storageBucket, messagingSenderId: CONFIG.messagingSenderId, appId: CONFIG.appId });
+    FB.A = auth.getAuth(a);
+    FB.D = fs.initializeFirestore(a, { ignoreUndefinedProperties: true });
+    if (CONFIG.emulator) { auth.connectAuthEmulator(FB.A, "http://127.0.0.1:9099", { disableWarnings: true }); fs.connectFirestoreEmulator(FB.D, "127.0.0.1", 8080); window.__tf = { FB }; }
+  } catch (e) { fatal = "Could not load the sign-in service. Check your internet connection and reload. (" + e.message + ")"; render(); return; }
+  FB.getRedirectResult(FB.A).catch(e => toast("Sign-in failed: " + e.message, 5000));
+  FB.onAuthStateChanged(FB.A, u => {
+    authReady = true;
+    me = u ? { uid: u.uid, name: u.displayName || u.email, email: (u.email || "").toLowerCase() } : null;
+    if (!me) { closeProject(); myProjects = null; render(); return; }
+    const want = (location.hash.match(/^#p-([\w-]+)$/) || [])[1] || lsGet("twofold-last");
+    if (want) openProject(want); else loadProjects();
+  });
+}
+async function signIn() {
+  const provider = new FB.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+  try { await FB.signInWithPopup(FB.A, provider); }
+  catch (e) {
+    if (e.code === "auth/popup-blocked" || e.code === "auth/operation-not-supported-in-this-environment") return FB.signInWithRedirect(FB.A, provider);
+    if (e.code !== "auth/popup-closed-by-user" && e.code !== "auth/cancelled-popup-request") toast("Sign-in failed: " + e.message, 5000);
+  }
+}
+function signOut() { lsSet("twofold-last", ""); history.replaceState(null, "", location.pathname); FB.signOut(FB.A); }
+
+async function loadProjects() {
+  closeProject(); myProjects = null; render();
+  try {
+    const snap = await FB.getDocs(FB.query(ref.projects(), FB.where("emails", "array-contains", me.email)));
+    myProjects = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+  } catch (e) { fail(e); myProjects = []; }
+  render();
+}
+async function createProject(name) {
+  const id = FB.doc(ref.projects()).id;
+  const data = { name, owner: me.uid, ownerEmail: me.email, emails: [me.email], members: { [me.uid]: { name: me.name, email: me.email, done: 0 } }, blind: true,
+    keywords: DEFAULT_KW, reasons: DEFAULT_REASONS, sources: [], chunkVersion: 0, recordCount: 0, assignCounts: {}, createdAt: new Date().toISOString() };
+  try { await FB.setDoc(ref.proj(id), data); ui.tab = "import"; openProject(id); } catch (e) { fail(e); }
+}
+function closeProject() {
+  subs.forEach(u => u()); subs = []; if (revealSub) revealSub(); revealSub = null; ownerSubbed = false;
+  PID = null; P = null; R = []; byId = new Map(); loadedChunkV = null; D = { dupPairs: [], removed: {}, notDup: {}, dupHistory: [] };
+  A = null; FINAL = {}; OTHERS = {}; MY = []; myById = new Map(); myAssignV = null; DEC = {}; pending = null; dupChoice = {}; teamOff = null;
+  ui = Object.assign(ui, { cur: null, search: "", listLimit: 200 });
+}
+function openProject(id) {
+  closeProject(); PID = id; lsSet("twofold-last", id);
+  if (location.hash !== "#p-" + id) history.replaceState(null, "", "#p-" + id);
+  render();
+  subs.push(FB.onSnapshot(ref.proj(), { includeMetadataChanges: true }, snap => {
+    if (!snap.exists()) { toast("That review was deleted."); lsSet("twofold-last", ""); history.replaceState(null, "", location.pathname); loadProjects(); return; }
+    const first = !P; P = snap.data();
+    if (first && !isLead() && !["screen", "export"].includes(ui.tab)) ui.tab = "screen";
+    const mine = P.members && P.members[me.uid];
+    if (!mine || mine.name !== me.name || mine.email !== me.email) FB.updateDoc(ref.proj(), new FB.FieldPath("members", me.uid), { name: me.name, email: me.email, done: mine ? mine.done || 0 : 0, total: mine ? mine.total || 0 : 0 }).catch(() => {});
+    if (isLead()) { ownerSubscribe(); if (P.chunkVersion !== loadedChunkV) loadChunks(P.chunkVersion); }
+    if (!snap.metadata.hasPendingWrites) syncReveal(); // wait until the server has the new blind setting
+    renderSoon();
+  }, e => { fail(e); lsSet("twofold-last", ""); history.replaceState(null, "", location.pathname); loadProjects(); }));
+  subs.push(FB.onSnapshot(ref.assign(me.email), snap => {
+    const a = snap.exists() ? snap.data() : null;
+    if (!a) { MY = []; myById = new Map(); myAssignV = null; renderSoon(); return; }
+    if (a.v !== myAssignV) loadMyParts(a.v);
+  }, () => {}));
+  subs.push(FB.onSnapshot(ref.dec(me.uid), snap => { DEC = (snap.exists() && snap.data().d) || {}; renderSoon(); }, () => {}));
+}
+function ownerSubscribe() {
+  if (ownerSubbed) return; ownerSubbed = true;
+  subs.push(FB.onSnapshot(ref.meta("dups"), s => { D = Object.assign({ dupPairs: [], removed: {}, notDup: {}, dupHistory: [] }, s.exists() ? s.data() : {}); renderSoon(); }, () => {}));
+  subs.push(FB.onSnapshot(ref.meta("assignment"), s => { A = s.exists() ? s.data() : null; renderSoon(); }, () => {}));
+  subs.push(FB.onSnapshot(ref.meta("final"), s => { FINAL = (s.exists() && s.data().f) || {}; renderSoon(); }, () => {}));
+}
+function syncReveal() {
+  const open = isLead() && P.blind === false;
+  if (open && !revealSub) {
+    revealSub = FB.onSnapshot(ref.decisions(), snap => {
+      const o = {}; snap.docs.forEach(d => { const x = d.data(); o[d.id] = { name: x.name || (P.members[d.id] || {}).name || "Reviewer", email: x.email || (P.members[d.id] || {}).email || "", d: x.d || {} }; });
+      OTHERS = o; revealTries = 0; renderSoon();
+    }, e => { revealSub = null; if (++revealTries <= 3) setTimeout(() => { if (P) syncReveal(); }, 1500 * revealTries); else fail(e); });
+  } else if (!open && revealSub) { revealSub(); revealSub = null; OTHERS = {}; }
+}
+async function loadChunks(v) {
+  loadedChunkV = v;
+  if (!v) { R = []; reindex(); renderSoon(); return; }
+  try {
+    const snap = await FB.getDocs(ref.chunks());
+    if (loadedChunkV !== v) return;
+    R = snap.docs.map(d => d.data()).filter(d => d.v === v).sort((a, b) => a.i - b.i).flatMap(d => d.records);
+    reindex(); renderSoon();
+  } catch (e) { fail(e); }
+}
+async function loadMyParts(v) {
+  myAssignV = v;
+  try {
+    const snap = await FB.getDocs(ref.parts(me.email));
+    if (myAssignV !== v) return;
+    MY = snap.docs.map(d => d.data()).filter(d => d.v === v).sort((a, b) => a.i - b.i).flatMap(d => d.records).sort((a, b) => a.no - b.no);
+    myById = new Map(MY.map(r => [r.id, r]));
+    updateProgress(); renderSoon();
+  } catch (e) { fail(e); }
+}
+
+/* ---------- writes ---------- */
+function setDecision(id, val) {
+  if (val) DEC[id] = val; else delete DEC[id];
+  FB.setDoc(ref.dec(me.uid), { name: me.name, email: me.email, d: { [id]: val || FB.deleteField() } }, { merge: true }).catch(fail);
+  updateProgress();
+}
+let progressTimer = null;
+function updateProgress() {
+  clearTimeout(progressTimer);
+  progressTimer = setTimeout(() => {
+    if (!P) return; const done = MY.filter(r => DEC[r.id]).length; const mine = P.members[me.uid] || {};
+    if (mine.done === done && mine.total === MY.length) return;
+    FB.updateDoc(ref.proj(), new FB.FieldPath("members", me.uid), { name: me.name, email: me.email, done, total: MY.length }).catch(() => {});
+  }, 2500);
+}
+const saveDups = () => FB.setDoc(ref.meta("dups"), { dupPairs: D.dupPairs, removed: D.removed, notDup: D.notDup, dupHistory: D.dupHistory }).catch(fail);
+const saveFinal = (id, v) => { if (v) FINAL[id] = v; else delete FINAL[id]; return FB.setDoc(ref.meta("final"), { f: { [id]: v || FB.deleteField() } }, { merge: true }).catch(fail); };
+const saveProject = fields => FB.updateDoc(ref.proj(), fields).catch(fail);
+async function writeParts(coll, v, records) {
+  const parts = packParts(records);
+  for (let i = 0; i < parts.length; i++) await FB.setDoc(FB.doc(coll, v + "-" + i), { v, i, records: parts[i] });
+  return parts.length;
+}
+async function deleteStale(coll, v) { const snap = await FB.getDocs(coll); for (const d of snap.docs) if (d.data().v !== v) await FB.deleteDoc(d.ref); }
+async function saveRecords() {
+  const v = Date.now();
+  busy = "Saving records…"; render();
+  try {
+    const n = await writeParts(ref.chunks(), v, R);
+    await FB.setDoc(ref.meta("dups"), { dupPairs: D.dupPairs, removed: D.removed, notDup: D.notDup, dupHistory: D.dupHistory });
+    loadedChunkV = v;
+    await FB.updateDoc(ref.proj(), { chunkVersion: v, chunkCount: n, recordCount: R.length, sources: P.sources || [] });
+    await deleteStale(ref.chunks(), v);
+  } catch (e) { fail(e); }
+  busy = ""; render();
+}
+async function saveAssignment(plan) {
+  busy = "Saving assignments…"; render();
+  try {
+    const v = Date.now(); const pos = new Map(plan.order.map((id, i) => [id, i + 1]));
+    const per = {}; for (const e of plan.emails) per[e] = [];
+    for (const [id, es] of Object.entries(plan.map)) { const r = byId.get(id); if (!r) continue; for (const e of es) (per[e] = per[e] || []).push(Object.assign({ no: pos.get(id) }, r)); }
+    const prev = A ? Object.keys(A.counts || {}) : [];
+    for (const e of prev) if (!per[e]) per[e] = [];
+    const counts = {};
+    for (const [e, recs] of Object.entries(per)) {
+      recs.sort((a, b) => a.no - b.no);
+      await writeParts(ref.parts(e), v, recs);
+      await FB.setDoc(ref.assign(e), { v, count: recs.length });
+      await deleteStale(ref.parts(e), v);
+      if (recs.length) counts[e] = recs.length;
+    }
+    await FB.setDoc(ref.meta("assignment"), { order: plan.order, map: plan.map, k: plan.k, emails: plan.emails, counts, at: new Date().toISOString() });
+    await FB.updateDoc(ref.proj(), { assignCounts: counts });
+    toast("Assignments saved. Each reviewer sees their papers now.");
+  } catch (e) { fail(e); }
+  busy = ""; render();
+}
+async function deleteProject() {
+  busy = "Deleting the review…"; render();
+  try {
+    const kill = async coll => { const s = await FB.getDocs(coll); for (const d of s.docs) await FB.deleteDoc(d.ref); };
+    await kill(ref.chunks());
+    const emails = new Set([...(P.emails || []), ...Object.keys(P.assignCounts || {}), ...Object.keys((A && A.counts) || {})]);
+    for (const e of emails) { await kill(ref.parts(e)); await FB.deleteDoc(ref.assign(e)); }
+    for (const uid of Object.keys(P.members || {})) await FB.deleteDoc(ref.dec(uid));
+    for (const m of ["dups", "assignment", "final"]) await FB.deleteDoc(ref.meta(m));
+    const id = PID; closeProject(); await FB.deleteDoc(ref.proj(id));
+    lsSet("twofold-last", ""); history.replaceState(null, "", location.pathname);
+    toast("Review deleted."); busy = ""; loadProjects(); return;
+  } catch (e) { fail(e); }
+  busy = ""; render();
+}
+
 /* ---------- import ---------- */
-let pending = null; // { files:[{name, rows, header}], map }
-function addRecords(rows, header, map, sourceName) {
-  const taken = new Set(S.records.map(r => r.id));
-  let added = 0;
+function addRecords(rows, map, sourceName) {
+  const taken = new Set(R.map(r => r.id)); let added = 0;
   for (const row of rows) {
     const g = k => (map[k] >= 0 ? (row[map[k]] || "").trim() : "");
     const rec = { title: g("title"), abstract: g("abstract"), authors: g("authors"), year: yearOf(g("year")), journal: g("journal"), doi: normDoi(g("doi")), pmid: g("pmid").replace(/\D/g, ""), keywords: g("keywords"), url: g("url"), source: sourceName };
     if (!rec.title && !rec.abstract) continue;
-    let base = "r" + fnv((rec.doi || normTitle(rec.title)) + "|" + rec.year + "|" + normTitle(rec.authors).slice(0, 20));
+    const base = "r" + fnv((rec.doi || normTitle(rec.title)) + "|" + rec.year + "|" + normTitle(rec.authors).slice(0, 20));
     let id = base, n = 2; while (taken.has(id)) id = base + "-" + n++;
-    taken.add(id); rec.id = id; S.records.push(rec); added++;
+    taken.add(id); rec.id = id; R.push(rec); added++;
   }
-  S.sources.push({ name: sourceName, count: added, at: new Date().toISOString() });
+  P.sources = (P.sources || []).concat({ name: sourceName, count: added, at: new Date().toISOString() });
   return added;
 }
 
-/* ---------- duplicate detection ---------- */
+/* ---------- duplicates ---------- */
 function bigrams(s) { const t = s.replace(/ /g, ""); const m = new Map(); for (let i = 0; i < t.length - 1; i++) { const b = t.substr(i, 2); m.set(b, (m.get(b) || 0) + 1); } return { m, n: Math.max(1, t.length - 1) }; }
 function dice(a, b) { let inter = 0; const [x, y] = a.m.size < b.m.size ? [a, b] : [b, a]; for (const [k, v] of x.m) { const w = y.m.get(k); if (w) inter += Math.min(v, w); } return 2 * inter / (a.n + b.n); }
 const RANK = { doi: 4, pmid: 4, title: 3, fuzzy: 1 };
+function pairKey(a, b) { return a < b ? a + "|" + b : b + "|" + a; }
 function detectDuplicates() {
-  const recs = S.records; const pairs = new Map();
-  const add = (a, b, reason, score) => {
-    if (a === b) return; const [x, y] = a < b ? [a, b] : [b, a]; const k = x + "|" + y; const p = pairs.get(k);
-    if (!p || RANK[reason] > RANK[p.reason]) pairs.set(k, { a: x, b: y, reason, score });
-  };
+  const pairs = new Map();
+  const add = (a, b, reason, score) => { if (a === b) return; const k = pairKey(a, b); const p = pairs.get(k); if (!p || RANK[reason] > RANK[p.reason]) { const [x, y] = a < b ? [a, b] : [b, a]; pairs.set(k, { a: x, b: y, reason, score }); } };
   const bucket = (keyFn, reason) => {
     const m = new Map();
-    for (const r of recs) { const k = keyFn(r); if (!k) continue; if (!m.has(k)) m.set(k, []); m.get(k).push(r.id); }
+    for (const r of R) { const k = keyFn(r); if (!k) continue; if (!m.has(k)) m.set(k, []); m.get(k).push(r.id); }
     for (const ids of m.values()) if (ids.length > 1 && ids.length < 50) for (let i = 1; i < ids.length; i++) add(ids[0], ids[i], reason, 1);
   };
-  bucket(r => r.doi, "doi");
-  bucket(r => r.pmid, "pmid");
+  bucket(r => r.doi, "doi"); bucket(r => r.pmid, "pmid");
   bucket(r => { const t = normTitle(r.title); return t.length >= 15 ? t : ""; }, "title");
-  // fuzzy titles (sorted neighbourhood): sort titles three ways (as written, reversed, words alphabetised)
-  // and compare each title with its close neighbours, so spelling variants and small typos still meet
-  const prep = recs.map(r => { const t = normTitle(r.title); return { id: r.id, t, year: r.year, bg: t.length >= 15 ? bigrams(t) : null }; }).filter(p => p.bg);
+  // similar titles (sorted neighbourhood): sort titles three ways and compare close neighbours,
+  // so spelling variants (randomised/randomized) and small typos still meet
+  const prep = R.map(r => { const t = normTitle(r.title); return { id: r.id, t, year: r.year, bg: t.length >= 15 ? bigrams(t) : null }; }).filter(p => p.bg);
   const keys = [p => p.t, p => p.t.split("").reverse().join(""), p => p.t.split(" ").sort().join(" ")];
   const seen = new Set();
   for (const key of keys) {
@@ -351,17 +543,15 @@ function detectDuplicates() {
     for (let i = 0; i < order.length; i++) for (let j = i + 1; j < Math.min(order.length, i + 12); j++) {
       const p = order[i], q = order[j]; if (q.t === p.t) continue;
       const k = pairKey(p.id, q.id); if (seen.has(k)) continue; seen.add(k);
-      const lr = Math.min(p.t.length, q.t.length) / Math.max(p.t.length, q.t.length); if (lr < 0.75) continue;
-      const sc = dice(p.bg, q.bg);
-      const yearsFar = p.year && q.year && Math.abs(+p.year - +q.year) > 1;
-      if (sc >= (yearsFar ? 0.96 : 0.88)) add(p.id, q.id, "fuzzy", sc);
+      if (Math.min(p.t.length, q.t.length) / Math.max(p.t.length, q.t.length) < 0.75) continue;
+      const sc = dice(p.bg, q.bg); const yearsFar = p.year && q.year && Math.abs(+p.year - +q.year) > 1;
+      if (sc >= (yearsFar ? 0.96 : 0.88)) add(p.id, q.id, "fuzzy", Math.round(sc * 1000) / 1000);
     }
   }
-  S.dupPairs = [...pairs.values()];
+  D.dupPairs = [...pairs.values()];
 }
-function pairKey(a, b) { return a < b ? a + "|" + b : b + "|" + a; }
 function dupGroups() {
-  const live = S.dupPairs.filter(p => !S.removed[p.a] && !S.removed[p.b] && !S.notDup[pairKey(p.a, p.b)] && byId.has(p.a) && byId.has(p.b));
+  const live = D.dupPairs.filter(p => !D.removed[p.a] && !D.removed[p.b] && !D.notDup[pairKey(p.a, p.b)] && byId.has(p.a) && byId.has(p.b));
   const parent = new Map(); const find = x => { while (parent.get(x) !== x) { parent.set(x, parent.get(parent.get(x))); x = parent.get(x); } return x; };
   for (const p of live) { if (!parent.has(p.a)) parent.set(p.a, p.a); if (!parent.has(p.b)) parent.set(p.b, p.b); parent.set(find(p.a), find(p.b)); }
   const groups = new Map();
@@ -371,119 +561,233 @@ function dupGroups() {
     .sort((a, b) => (b.exact - a.exact) || (b.best - a.best));
 }
 function completeness(r) { return (r.abstract || "").length + (r.doi ? 200 : 0) + (r.authors ? 50 : 0) + (r.year ? 20 : 0) + (r.journal ? 20 : 0); }
-let dupChoice = {}; // groupKey -> {id: "keep"|"drop"}
 function groupKey(g) { return g.ids.slice().sort().join(","); }
 function defaultChoice(g) { const best = g.ids.slice().sort((a, b) => completeness(byId.get(b)) - completeness(byId.get(a)))[0]; const c = {}; g.ids.forEach(id => c[id] = id === best ? "keep" : "drop"); return c; }
 function resolveGroup(g, choice) {
   const keep = g.ids.filter(id => choice[id] === "keep"); const drop = g.ids.filter(id => choice[id] === "drop");
   if (!keep.length) { toast("Keep at least one record."); return false; }
   const act = { removed: drop.slice(), notDup: [], keep: keep[0], at: Date.now() };
-  drop.forEach(id => S.removed[id] = keep[0]);
-  for (let i = 0; i < keep.length; i++) for (let j = i + 1; j < keep.length; j++) { const k = pairKey(keep[i], keep[j]); if (!S.notDup[k]) { S.notDup[k] = 1; act.notDup.push(k); } }
-  S.dupHistory.push(act); delete dupChoice[groupKey(g)]; return true;
+  drop.forEach(id => D.removed[id] = keep[0]);
+  for (let i = 0; i < keep.length; i++) for (let j = i + 1; j < keep.length; j++) { const k = pairKey(keep[i], keep[j]); if (!D.notDup[k]) { D.notDup[k] = 1; act.notDup.push(k); } }
+  D.dupHistory.push(act); delete dupChoice[groupKey(g)]; return true;
 }
-function undoDup(i) { const act = S.dupHistory[i]; if (!act) return; act.removed.forEach(id => delete S.removed[id]); act.notDup.forEach(k => delete S.notDup[k]); S.dupHistory.splice(i, 1); }
+function undoDup(i) { const act = D.dupHistory[i]; if (!act) return; act.removed.forEach(id => delete D.removed[id]); act.notDup.forEach(k => delete D.notDup[k]); D.dupHistory.splice(i, 1); }
 
-/* ---------- reviewers & decisions ---------- */
-function reviewers() {
-  const list = [{ key: "__me", name: (S.reviewer || "You") + " (this device)", decisions: S.decisions }];
-  for (const [name, o] of Object.entries(S.others)) list.push({ key: name, name, decisions: o.decisions });
-  return list;
+/* ---------- assignment ---------- */
+// Keeps existing assignments (unless redo), drops papers that became duplicates or whose
+// reviewer left, then spreads the unassigned papers. A fresh assignment with a team size that
+// divides evenly gives contiguous blocks: 100 papers, 4 people, 2 per paper -> #1-50 A+B, #51-100 C+D.
+function planAssignment({ emails, k, shuffleNew, redo }) {
+  const activeIds = activeRecords().map(r => r.id); const active = new Set(activeIds); const team = new Set(emails);
+  let order = (!redo && A) ? A.order.filter(id => active.has(id)) : [];
+  const map = {};
+  if (!redo && A) for (const [id, es] of Object.entries(A.map)) if (active.has(id) && es.length === k && es.every(e => team.has(e))) map[id] = es.slice();
+  const inOrder = new Set(order);
+  let fresh = activeIds.filter(id => !inOrder.has(id)); if (shuffleNew) shuffle(fresh);
+  order = order.concat(fresh);
+  const todo = order.filter(id => !map[id]);
+  const load = {}; emails.forEach(e => load[e] = 0); Object.values(map).forEach(es => es.forEach(e => load[e]++));
+  const m = emails.length;
+  if (m % k === 0) {
+    const groups = []; for (let i = 0; i < m; i += k) groups.push(emails.slice(i, i + k));
+    if (!Object.keys(map).length) { const per = todo.length / groups.length; todo.forEach((id, i) => map[id] = groups[Math.min(groups.length - 1, Math.floor(i / per))].slice()); }
+    else todo.forEach(id => { const g = groups.slice().sort((a, b) => load[a[0]] - load[b[0]])[0]; map[id] = g.slice(); g.forEach(e => load[e]++); });
+  } else {
+    todo.forEach((id, i) => {
+      const pick = emails.map((e, j) => ({ e, l: load[e], o: ((j - i) % m + m) % m })).sort((a, b) => a.l - b.l || a.o - b.o).slice(0, k).map(x => x.e);
+      map[id] = pick; pick.forEach(e => load[e]++);
+    });
+  }
+  return { order, map, k, emails };
 }
-function decide(id, d) {
-  const cur = S.decisions[id];
-  if (!d) { delete S.decisions[id]; }
-  else S.decisions[id] = { d, reason: d === "exclude" ? (cur && cur.reason) || "" : "", note: (cur && cur.note) || "", at: new Date().toISOString() };
-  save();
+function assignmentStatus() {
+  const act = activeRecords(); const active = new Set(act.map(r => r.id)); const team = new Set(P.emails);
+  const assigned = A ? Object.keys(A.map).filter(id => active.has(id)) : [];
+  const stale = A ? Object.entries(A.map).filter(([id, es]) => !active.has(id) || es.some(e => !team.has(e))).length : 0;
+  return { total: act.length, assigned: assigned.length, unassigned: act.length - assigned.length, stale };
 }
+function groupSummary() {
+  if (!A) return [];
+  const pos = new Map(A.order.map((id, i) => [id, i + 1])); const groups = new Map();
+  for (const [id, es] of Object.entries(A.map)) { const key = es.slice().sort().join(" + "); if (!groups.has(key)) groups.set(key, []); if (pos.has(id)) groups.get(key).push(pos.get(id)); }
+  return [...groups.entries()].map(([key, nums]) => {
+    nums.sort((a, b) => a - b); const ranges = []; let s = nums[0], p = nums[0];
+    for (let i = 1; i <= nums.length; i++) { if (nums[i] === p + 1) { p = nums[i]; continue; } ranges.push(s === p ? "#" + s : "#" + s + "–" + p); s = p = nums[i]; }
+    return { key, n: nums.length, ranges: ranges.length > 6 ? ranges.slice(0, 6).join(", ") + ` and ${ranges.length - 6} more ranges` : ranges.join(", ") };
+  }).sort((a, b) => a.key.localeCompare(b.key));
+}
+function nameOf(email) { const m = Object.values((P && P.members) || {}).find(x => x.email === email); return m ? m.name : email; }
+
+/* ---------- compare ---------- */
+function compareData() {
+  if (!A) return null;
+  const byEmail = {}; for (const o of Object.values(OTHERS)) byEmail[o.email] = o.d;
+  byEmail[me.email] = DEC;
+  const rows = []; const pairStats = new Map(); let full = 0, agreeN = 0;
+  for (const r of activeRecords()) {
+    const es = A.map[r.id]; if (!es) continue;
+    const votes = es.map(e => ({ e, v: (byEmail[e] || {})[r.id] || null }));
+    const decided = votes.filter(x => x.v);
+    let status = "pending";
+    if (decided.length === votes.length) { full++; const ds = new Set(decided.map(x => x.v.d)); status = ds.size === 1 ? (decided[0].v.d === "maybe" ? "bothmaybe" : "agree") : "conflict"; if (ds.size === 1) agreeN++; }
+    for (let i = 0; i < votes.length; i++) for (let j = i + 1; j < votes.length; j++) {
+      if (!votes[i].v || !votes[j].v) continue;
+      const key = [votes[i].e, votes[j].e].sort().join("|"); if (!pairStats.has(key)) pairStats.set(key, []);
+      const [a, b] = votes[i].e < votes[j].e ? [votes[i].v.d, votes[j].v.d] : [votes[j].v.d, votes[i].v.d];
+      pairStats.get(key).push([a, b]);
+    }
+    const fin = FINAL[r.id] || (status === "agree" ? decided[0].v.d : (es.length === 1 && decided.length && decided[0].v.d !== "maybe" ? decided[0].v.d : null));
+    rows.push({ r, votes, status, fin });
+  }
+  const pairs = [...pairStats.entries()].map(([key, list]) => Object.assign({ key, n: list.length }, kappa(list)));
+  const open = rows.filter(x => (x.status === "conflict" || x.status === "bothmaybe") && !FINAL[x.r.id]);
+  return { rows, pairs, open, full, agree: full ? agreeN / full : 0 };
+}
+function kappa(list) {
+  const cats = ["include", "exclude", "maybe"]; const n = list.length; if (!n) return { po: 0, k3: null, k2: null };
+  const po = list.filter(([a, b]) => a === b).length / n;
+  const pe = cats.reduce((s, c) => s + (list.filter(x => x[0] === c).length / n) * (list.filter(x => x[1] === c).length / n), 0);
+  const bin = x => x === "exclude" ? "e" : "i"; // maybe counts as include, the usual title/abstract convention
+  const bpo = list.filter(([a, b]) => bin(a) === bin(b)).length / n;
+  const pa = list.filter(x => bin(x[0]) === "i").length / n, pb = list.filter(x => bin(x[1]) === "i").length / n;
+  const bpe = pa * pb + (1 - pa) * (1 - pb);
+  return { po, k3: pe < 1 ? (po - pe) / (1 - pe) : 1, k2: bpe < 1 ? (bpo - bpe) / (1 - bpe) : 1 };
+}
+function kappaWord(k) { if (k == null) return ""; if (k < 0.2) return "slight"; if (k < 0.4) return "fair"; if (k < 0.6) return "moderate"; if (k < 0.8) return "substantial"; return "almost perfect"; }
+function pill(v) { return v ? `<span class="pill ${v.d}">${v.d[0].toUpperCase() + v.d.slice(1)}</span>` : `<span class="pill">Not yet</span>`; }
 
 /* ---------- highlighting ---------- */
-function kwRegex(list) { const words = list.map(w => w.trim()).filter(Boolean).sort((a, b) => b.length - a.length).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")); return words.length ? new RegExp("\\b(" + words.join("|") + ")", "gi") : null; }
+function kwRegex(list) { const words = (list || []).map(w => w.trim()).filter(Boolean).sort((a, b) => b.length - a.length).map(w => esc(w).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")); return words.length ? new RegExp("\\b(" + words.join("|") + ")", "gi") : null; }
 function highlight(text) {
-  let html = esc(text);
-  const ri = kwRegex(S.keywords.inc), re = kwRegex(S.keywords.exc);
-  // mark on escaped text; keywords are plain words so they do not collide with entities
-  const marks = [];
-  const scan = (rx, cls) => { if (!rx) return; html.replace(rx, (m, _g, off) => { marks.push([off, off + m.length, cls]); return m; }); };
-  scan(re, "e"); scan(ri, "i");
+  const html = esc(text); const kw = (P && P.keywords) || DEFAULT_KW; const marks = [];
+  const scan = (rx, cls) => { if (!rx) return; let m; while ((m = rx.exec(html))) marks.push([m.index, m.index + m[0].length, cls]); };
+  scan(kwRegex(kw.exc), "e"); scan(kwRegex(kw.inc), "i");
   marks.sort((a, b) => a[0] - b[0]); let out = "", pos = 0;
   for (const [s, e, c] of marks) { if (s < pos) continue; out += html.slice(pos, s) + '<mark class="' + c + '">' + html.slice(s, e) + "</mark>"; pos = e; }
   return out + html.slice(pos);
 }
 
-/* ---------- views ---------- */
-function setTab(t) { S.ui.tab = t; save(); render(); window.scrollTo(0, 0); }
+/* ---------- rendering ---------- */
+let renderQueued = false;
+function renderSoon() {
+  const a = document.activeElement;
+  if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type !== "file" && a.closest("main")) { renderQueued = true; return; }
+  render();
+}
+document.addEventListener("focusout", () => { if (renderQueued) { renderQueued = false; setTimeout(() => { if (!document.activeElement || !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) render(); else renderQueued = true; }, 0); } });
+function setTab(t) { ui.tab = t; render(); window.scrollTo(0, 0); }
+function tabsFor() {
+  if (!P) return [];
+  const t = [];
+  if (isLead()) {
+    const g = dupGroups().length; const st = assignmentStatus(); const cd = P.blind === false ? compareData() : null;
+    t.push(["import", "Records", R.length ? R.length : null]);
+    t.push(["dups", "Duplicates", g || null, true]);
+    t.push(["team", "Team", st.unassigned || st.stale ? "!" : null, true]);
+    t.push(["screen", "Screen", MY.length ? MY.filter(r => DEC[r.id]).length + "/" + MY.length : null]);
+    t.push(["compare", "Compare", cd && cd.open.length ? cd.open.length : null, true]);
+    t.push(["export", "Export"]);
+  } else {
+    t.push(["screen", "Screen", MY.length ? MY.filter(r => DEC[r.id]).length + "/" + MY.length : null]);
+    t.push(["export", "Export"]);
+  }
+  return t;
+}
 function render() {
-  reindex();
-  document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === S.ui.tab));
-  document.querySelectorAll("section.view").forEach(s => s.hidden = s.id !== "view-" + S.ui.tab);
-  $("#projName").textContent = S.records.length ? S.name : "";
-  const reviewerInput = $("#reviewerName"); if (document.activeElement !== reviewerInput) reviewerInput.value = S.reviewer;
-  const groups = dupGroups();
-  const cd = $("#cDups"); cd.hidden = !groups.length; cd.textContent = groups.length; cd.className = "count warn";
-  const act = active(); const done = act.filter(r => S.decisions[r.id]).length;
-  const cs = $("#cScreen"); cs.hidden = !act.length; cs.textContent = done + "/" + act.length;
-  const cmp = compareData(); const cc = $("#cConf"); cc.hidden = !cmp || !cmp.open.length; if (cmp) { cc.textContent = cmp.open.length; cc.className = "count warn"; }
-  ({ import: renderImport, dups: renderDups, screen: renderScreen, compare: renderCompare, export: renderExport })[S.ui.tab]();
+  const main = $("#main");
+  $("#projName").textContent = P ? P.name : "";
+  const tabs = tabsFor();
+  if (P && !tabs.some(t => t[0] === ui.tab)) ui.tab = "screen";
+  $("#tabs").innerHTML = tabs.map(([k, l, c, warn]) => `<button data-tab="${k}" aria-selected="${ui.tab === k}">${l}${c != null ? ` <span class="count ${warn ? "warn" : ""}">${c}</span>` : ""}</button>`).join("");
+  $("#tabs").querySelectorAll("button").forEach(b => b.onclick = () => setTab(b.dataset.tab));
+  $("#who").innerHTML = me ? `${P ? `<button id="homeBtn">All reviews</button>` : ""}<span class="name muted" title="${esc(me.email)}">${esc(me.name)}</span><button id="outBtn">Sign out</button>` : "";
+  if (me) { const h = $("#homeBtn"); if (h) h.onclick = () => { lsSet("twofold-last", ""); history.replaceState(null, "", location.pathname); loadProjects(); }; $("#outBtn").onclick = signOut; }
+  if (fatal) { main.innerHTML = `<div class="panel empty"><h2>Twofold can't start</h2><p class="muted">${esc(fatal)}</p></div>`; return; }
+  if (!authReady) { main.innerHTML = `<div class="panel empty"><p class="muted">Loading…</p></div>`; return; }
+  if (!me) return renderSignIn(main);
+  if (busy) { main.innerHTML = `<div class="panel empty"><h3>${esc(busy)}</h3><p class="muted">Keep this page open.</p></div>`; return; }
+  if (!PID) return renderHome(main);
+  if (!P) { main.innerHTML = `<div class="panel empty"><p class="muted">Opening the review…</p></div>`; return; }
+  main.innerHTML = `<section class="view" id="view"></section>`;
+  ({ import: renderImport, dups: renderDups, team: renderTeam, screen: renderScreen, compare: renderCompare, export: renderExport })[ui.tab]($("#view"));
 }
 
-function renderImport() {
-  const v = $("#view-import");
-  const has = S.records.length > 0;
+function renderSignIn(main) {
+  main.innerHTML = `<div class="panel signin">
+    <h1>Screen abstracts together</h1>
+    <p class="muted">Free title and abstract screening for systematic reviews. Each paper is screened blind by two (or more) reviewers, then the lead resolves the conflicts.</p>
+    <button class="primary" id="signInBtn">Sign in with Google</button>
+    <p class="muted small">Use the Google account whose email the review lead added. Nothing is posted to your account.</p>
+  </div>`;
+  $("#signInBtn").onclick = signIn;
+}
+function renderHome(main) {
+  const list = myProjects;
+  main.innerHTML = `<section class="view">
+    <div class="panel"><div class="row spread"><h2>Your reviews</h2></div>
+      ${list == null ? `<p class="muted">Loading…</p>` : list.length ? `<div class="cards">${list.map(p => {
+        const m = (p.members || {})[me.uid] || {}; const lead = p.owner === me.uid;
+        return `<button class="card" data-open="${esc(p.id)}"><span class="row spread"><span class="t">${esc(p.name)}</span>${lead ? `<span class="pill lead">Lead</span>` : `<span class="pill">Reviewer</span>`}</span>
+          <span class="muted small">${plural((p.emails || []).length, "member")} · ${plural(p.recordCount || 0, "record")}</span>
+          ${m.total ? `<span class="row"><span class="bar" style="flex:1"><i style="width:${(100 * (m.done || 0) / m.total).toFixed(1)}%"></i></span><span class="mono small">${m.done || 0}/${m.total}</span></span>` : `<span class="muted small">No papers assigned to you yet</span>`}
+        </button>`; }).join("")}</div>`
+      : `<p class="muted">No reviews yet. Start one below, or ask your lead to add <b>${esc(me.email)}</b> to theirs and then reload this page.</p>`}
+    </div>
+    <div class="panel"><h3>Start a new review</h3>
+      <p class="muted small">You become the lead: you import the records, invite the team, assign papers and resolve conflicts.</p>
+      <form class="row" id="newForm"><input type="text" id="newName" placeholder="Review name, e.g. Early mobilisation after hip fracture" style="flex:1;min-width:220px" required><button class="primary">Create review</button></form>
+    </div></section>`;
+  main.querySelectorAll("[data-open]").forEach(b => b.onclick = () => openProject(b.dataset.open));
+  $("#newForm").onsubmit = ev => { ev.preventDefault(); const n = $("#newName").value.trim(); if (n) createProject(n); };
+}
+
+/* Records (lead) */
+function renderImport(v) {
+  const has = R.length > 0;
   v.innerHTML = `
   <div class="grid2">
     <div class="panel">
-      <div><h2>${has ? "Add more records" : "Start a review"}</h2>
-      <p class="muted">Load CSV exports from PubMed, Scopus, Web of Science, Embase, Rayyan, Zotero or EndNote. You can load several files; they are merged and checked for duplicates.</p></div>
-      ${has ? "" : `<label class="label" for="projInput">Review name</label><input type="text" id="projInput" value="${esc(S.name)}">`}
-      <div class="drop" id="drop">
-        <p>Drop CSV files here</p>
-        <label class="btn primary">Choose CSV files<input type="file" id="csvInput" accept=".csv,.tsv,.txt,text/csv" multiple></label>
-        <p class="muted" style="font-size:12px">Files stay on this device. Nothing is uploaded.</p>
-      </div>
+      <div><h2>${has ? "Add more records" : "Import records"}</h2>
+      <p class="muted">Load CSV exports from PubMed, Scopus, Web of Science, Embase, Rayyan, Zotero or EndNote. Several files are merged and checked for duplicates. Only you, the lead, see the full set.</p></div>
+      <div class="dropzone" id="drop"><p>Drop CSV files here</p>
+        <label class="btn primary">Choose CSV files<input type="file" id="csvInput" accept=".csv,.tsv,.txt,text/csv" multiple></label></div>
       <div id="mapping"></div>
-    </div>
-    <div class="panel">
-      <div><h2>Joining a review?</h2><p class="muted">If the lead reviewer sent you a <span class="mono">.json</span> project file, open it here. You get the same deduplicated records, so your decisions line up with everyone else's.</p></div>
-      <label class="btn">Open project file<input type="file" id="projFile" accept=".json,application/json"></label>
-      <div id="projConfirm"></div>
-      <hr style="border:0;border-top:1px solid var(--line);width:100%">
-      <h3>How the two-reviewer workflow runs</h3>
-      <ol class="steps">
-        <li><b>Lead</b> imports the CSVs and resolves duplicates.</li>
-        <li><b>Lead</b> exports the project file (Export tab) and sends it to the second reviewer.</li>
-        <li><b>Each reviewer</b> types their name, then screens blind on their own device.</li>
-        <li><b>Each reviewer</b> exports their decisions file and sends it to the lead.</li>
-        <li><b>Lead</b> imports the decisions in the Compare tab, sees agreement and kappa, and resolves conflicts.</li>
-      </ol>
       ${has ? "" : `<button id="loadExample">Load an example set to try it</button>`}
     </div>
+    <div class="panel">
+      <h3>How a review runs</h3>
+      <ol class="steps">
+        <li><b>Records:</b> import your CSV files.</li>
+        <li><b>Duplicates:</b> keep one record of each duplicate group.</li>
+        <li><b>Team:</b> add your reviewers' Google emails and assign papers, for example two reviewers per paper.</li>
+        <li><b>Screen:</b> everyone screens their own papers, blind.</li>
+        <li><b>Compare:</b> turn blind mode off, see agreement and kappa, and settle each conflict.</li>
+      </ol>
+      <hr style="border:0;border-top:1px solid var(--line);width:100%">
+      <label class="label" for="projRename">Review name</label>
+      <div class="row"><input type="text" id="projRename" value="${esc(P.name)}" style="flex:1"><button id="renameBtn">Rename</button></div>
+    </div>
   </div>
-  ${has ? `<div class="panel"><div class="row" style="justify-content:space-between"><h3>${esc(S.name)}</h3>
-    <div class="row"><input type="text" id="projRename" value="${esc(S.name)}" aria-label="Review name"><button id="renameBtn">Rename</button></div></div>
-    <div class="tablewrap"><table><thead><tr><th>Source file</th><th>Records</th><th>Added</th></tr></thead><tbody>
-    ${S.sources.map(s => `<tr><td>${esc(s.name)}</td><td class="mono">${s.count}</td><td class="muted">${new Date(s.at).toLocaleString()}</td></tr>`).join("")}
+  ${has ? `<div class="panel"><h3>Sources</h3>
+    <div class="tablewrap"><table><thead><tr><th>File</th><th>Records</th><th>Added</th></tr></thead><tbody>
+    ${(P.sources || []).map(s => `<tr><td>${esc(s.name)}</td><td class="mono">${s.count}</td><td class="muted">${new Date(s.at).toLocaleString()}</td></tr>`).join("")}
     </tbody></table></div>
-    <p class="muted">${plural(S.records.length, "record")} in total · ${plural(Object.keys(S.removed).length, "duplicate")} removed · ${plural(active().length, "record")} to screen</p>
-    <div id="resetArea"><button class="danger" id="resetBtn">Delete this review from this device</button></div>
-  </div>` : ""}`;
+    <p class="muted">${plural(R.length, "record")} in total · ${plural(Object.keys(D.removed).length, "duplicate")} removed · ${plural(activeRecords().length, "paper")} to screen</p></div>` : ""}
+  <div class="panel"><h3>Delete this review</h3><p class="muted small">Removes every record and decision for everyone. Export your results first.</p>
+    <div id="delArea"><button class="danger" id="delBtn">Delete review</button></div></div>`;
   const drop = $("#drop");
   ["dragenter", "dragover"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.add("over"); }));
   ["dragleave", "drop"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.remove("over"); }));
   drop.addEventListener("drop", ev => handleCSVFiles([...ev.dataTransfer.files]));
   $("#csvInput").addEventListener("change", ev => handleCSVFiles([...ev.target.files]));
-  $("#projFile").addEventListener("change", ev => handleProjectFile(ev.target.files[0]));
-  const pi = $("#projInput"); if (pi) pi.addEventListener("change", () => { S.name = pi.value.trim() || "Untitled review"; save(); });
-  const ex = $("#loadExample"); if (ex) ex.addEventListener("click", loadExample);
-  const rb = $("#renameBtn"); if (rb) rb.addEventListener("click", () => { S.name = $("#projRename").value.trim() || S.name; save(); render(); toast("Renamed"); });
-  const rs = $("#resetBtn"); if (rs) rs.addEventListener("click", () => {
-    $("#resetArea").innerHTML = `<div class="confirm"><p>This deletes all records, duplicate decisions and screening decisions stored on this device. Export first if you need them.</p><div class="row"><button class="danger" id="resetYes">Delete everything</button><button id="resetNo">Cancel</button></div></div>`;
-    $("#resetYes").onclick = () => { const name = S.reviewer; S = freshState(); S.reviewer = name; dupChoice = {}; save(); render(); toast("Review deleted from this device"); };
-    $("#resetNo").onclick = render;
-  });
+  const ex = $("#loadExample"); if (ex) ex.onclick = loadExample;
+  $("#renameBtn").onclick = () => { const n = $("#projRename").value.trim(); if (n) { saveProject({ name: n }); toast("Renamed"); } };
+  $("#delBtn").onclick = () => {
+    $("#delArea").innerHTML = `<div class="confirm"><p>Delete <b>${esc(P.name)}</b> for everyone? This cannot be undone.</p><div class="row"><button class="danger" id="delYes">Delete for everyone</button><button id="delNo">Cancel</button></div></div>`;
+    $("#delYes").onclick = deleteProject; $("#delNo").onclick = render;
+  };
   if (pending) renderMapping();
 }
-
 async function handleCSVFiles(files) {
   files = files.filter(Boolean); if (!files.length) return;
   const parsed = [];
@@ -500,358 +804,27 @@ function renderMapping() {
   box.innerHTML = pending.files.map((f, fi) => {
     const m = pending.maps[fi];
     const opts = sel => `<option value="-1">(none)</option>` + f.header.map((h, i) => `<option value="${i}" ${i === sel ? "selected" : ""}>${esc(h || "Column " + (i + 1))}</option>`).join("");
-    const ti = m.title, ai = m.abstract;
-    const sample = f.rows.slice(0, 3);
     return `<div class="panel" style="padding:14px">
-      <div class="row" style="justify-content:space-between"><h3>${esc(f.name)}</h3><span class="muted mono">${f.rows.length} rows</span></div>
-      <p class="muted" style="font-size:13px">Check which column holds each field. Title and abstract matter most.</p>
+      <div class="row spread"><h3>${esc(f.name)}</h3><span class="muted mono">${f.rows.length} rows</span></div>
+      <p class="muted small">Check which column holds each field. Title and abstract matter most.</p>
       <div class="maprow">${Object.entries(FIELDS).map(([k, def]) => `<label><span class="label">${def.label}</span><select data-file="${fi}" data-field="${k}">${opts(m[k])}</select></label>`).join("")}</div>
       <div class="tablewrap"><table><thead><tr><th>Title</th><th>Abstract</th></tr></thead><tbody>
-      ${sample.map(r => `<tr><td class="clip">${esc(ti >= 0 ? r[ti] : "")}</td><td class="clip">${esc(ai >= 0 ? r[ai] : "")}</td></tr>`).join("")}
-      </tbody></table></div>
-    </div>`;
+      ${f.rows.slice(0, 3).map(r => `<tr><td class="clip">${esc(m.title >= 0 ? r[m.title] : "")}</td><td class="clip">${esc(m.abstract >= 0 ? r[m.abstract] : "")}</td></tr>`).join("")}
+      </tbody></table></div></div>`;
   }).join("") + `<div class="row"><button class="primary" id="doImport">Add ${plural(pending.files.reduce((n, f) => n + f.rows.length, 0), "record")} and check duplicates</button><button id="cancelImport">Cancel</button></div>`;
   box.querySelectorAll("select").forEach(s => s.addEventListener("change", () => { pending.maps[+s.dataset.file][s.dataset.field] = +s.value; renderMapping(); }));
   $("#cancelImport").onclick = () => { pending = null; render(); };
-  $("#doImport").onclick = () => {
+  $("#doImport").onclick = async () => {
     if (pending.maps.some(m => m.title < 0)) { toast("Pick the title column for every file."); return; }
-    const pi = $("#projInput"); if (pi) S.name = pi.value.trim() || S.name;
-    let n = 0; pending.files.forEach((f, i) => n += addRecords(f.rows, f.header, pending.maps[i], f.name));
-    pending = null; reindex(); detectDuplicates(); save(true);
+    let n = 0; pending.files.forEach((f, i) => n += addRecords(f.rows, pending.maps[i], f.name));
+    pending = null; reindex(); detectDuplicates();
+    await saveRecords();
     const g = dupGroups().length;
-    toast(`Added ${plural(n, "record")}. ${g ? plural(g, "possible duplicate group") + " found." : "No duplicates found."}`);
-    setTab(g ? "dups" : "screen");
+    toast(`Added ${plural(n, "record")}. ${g ? plural(g, "possible duplicate group") + " found." : "No duplicates found."}`, 4000);
+    setTab(g ? "dups" : "team");
   };
 }
-
-let projPending = null;
-async function handleProjectFile(file) {
-  if (!file) return;
-  let data; try { data = JSON.parse(await readFile(file)); } catch (e) { toast("That file is not a valid project file."); return; }
-  if (data.type === "twofold-decisions") { await importDecisions(data); setTab("compare"); return; }
-  if (data.type !== "twofold-project" || !Array.isArray(data.records)) { toast("That file is not a Twofold project file."); return; }
-  if (S.records.length && data.projectId !== S.projectId) {
-    projPending = data;
-    $("#projConfirm").innerHTML = `<div class="confirm"><p>Opening <b>${esc(data.name)}</b> replaces the review on this device (${plural(S.records.length, "record")}, ${plural(Object.keys(S.decisions).length, "decision")}).</p><div class="row"><button class="danger" id="pjYes">Replace</button><button id="pjNo">Cancel</button></div></div>`;
-    $("#pjYes").onclick = () => applyProject(projPending, false); $("#pjNo").onclick = () => { projPending = null; $("#projConfirm").innerHTML = ""; };
-    return;
-  }
-  applyProject(data, S.records.length > 0);
-}
-function applyProject(data, sameProject) {
-  const keep = sameProject ? { decisions: S.decisions, others: S.others, final: S.final } : { decisions: {}, others: {}, final: {} };
-  const name = S.reviewer;
-  S = Object.assign(freshState(), { projectId: data.projectId, name: data.name, records: data.records, sources: data.sources || [], dupPairs: data.dupPairs || [], removed: data.removed || {}, notDup: data.notDup || {}, dupHistory: data.dupHistory || [], keywords: data.keywords || S.keywords, reasons: data.reasons || DEFAULT_REASONS.slice() }, keep);
-  S.reviewer = name; projPending = null; dupChoice = {}; reindex(); save(true);
-  toast(`Opened ${data.name}: ${plural(active().length, "record")} to screen.`);
-  setTab("screen");
-  if (!S.reviewer) setTimeout(() => { $("#reviewerName").focus(); toast("Type your name at the top so your decisions are labelled."); }, 50);
-}
-
-function renderDups() {
-  const v = $("#view-dups");
-  const groups = dupGroups();
-  const exact = groups.filter(g => g.exact);
-  const reasonText = p => p.reason === "doi" ? "Same DOI" : p.reason === "pmid" ? "Same PMID" : p.reason === "title" ? "Identical title" : Math.round(p.score * 100) + "% similar title";
-  v.innerHTML = `
-  <div class="panel">
-    <div class="row" style="justify-content:space-between">
-      <div><h2>Duplicates</h2><p class="muted">${groups.length ? plural(groups.length, "group") + " to check. For each, keep one record and remove the copies, or mark them as different papers." : S.records.length ? "No open duplicate groups. Every record is ready to screen." : "Import records first."}</p></div>
-      <div class="row">${exact.length ? `<button class="primary" id="autoExact">Remove all exact matches (${exact.length})</button>` : ""}<button id="rescan" ${S.records.length ? "" : "disabled"}>Scan again</button></div>
-    </div>
-    <p class="muted" style="font-size:13px">Exact matches share a DOI, a PMID or an identical title. Auto-removal keeps the most complete record of each group. Similar titles always need your decision.</p>
-  </div>
-  ${groups.slice(0, 60).map((g, gi) => {
-    const k = groupKey(g); const choice = dupChoice[k] || (dupChoice[k] = defaultChoice(g));
-    const reasons = [...new Set(g.pairs.map(reasonText))];
-    return `<div class="panel group" data-g="${gi}">
-      <div class="row" style="justify-content:space-between"><div class="row">${reasons.map(r => `<span class="pill ${g.exact ? "exclude" : "maybe"}">${esc(r)}</span>`).join("")}<span class="muted">${g.ids.length} records</span></div>
-      <div class="row"><button class="primary" data-act="resolve" data-g="${gi}">Remove marked duplicates</button><button data-act="notdup" data-g="${gi}">Not duplicates</button></div></div>
-      <div class="members">${g.ids.map(id => { const r = byId.get(id); const c = choice[id]; return `<div class="member ${c === "drop" ? "dup" : "keep"}">
-        <div class="row" style="justify-content:space-between"><span class="label">${esc(r.source || "")}</span>
-        <span class="seg"><button class="k" aria-pressed="${c === "keep"}" data-act="set" data-g="${gi}" data-id="${id}" data-v="keep">Keep</button><button class="d" aria-pressed="${c === "drop"}" data-act="set" data-g="${gi}" data-id="${id}" data-v="drop">Duplicate</button></span></div>
-        <div class="mt">${esc(r.title || "(no title)")}</div>
-        <div class="meta">${r.authors ? `<span>${esc(shortAuthors(r.authors))}</span>` : ""}${r.year ? `<span class="mono">${esc(r.year)}</span>` : ""}${r.journal ? `<span>${esc(r.journal)}</span>` : ""}${r.doi ? `<span class="mono">${esc(r.doi)}</span>` : ""}</div>
-        <div class="ab">${esc(r.abstract || "No abstract")}</div></div>`; }).join("")}</div>
-    </div>`;
-  }).join("")}
-  ${groups.length > 60 ? `<p class="muted">Showing the first 60 groups. Resolve these to see more.</p>` : ""}
-  ${S.dupHistory.length ? `<div class="panel"><h3>Decisions made</h3><div class="tablewrap"><table><thead><tr><th>Kept</th><th>Removed</th><th></th></tr></thead><tbody>
-    ${S.dupHistory.map((a, i) => ({ a, i })).reverse().slice(0, 200).map(({ a, i }) => { const r = byId.get(a.keep); return `<tr><td class="clip">${esc(r ? r.title : a.keep)}</td><td class="mono">${a.removed.length ? a.removed.length + " removed" : "kept all (not duplicates)"}</td><td><button data-act="undo" data-i="${i}">Undo</button></td></tr>`; }).join("")}
-  </tbody></table></div></div>` : ""}`;
-  v.onclick = ev => {
-    const b = ev.target.closest("button[data-act]"); if (!b) return;
-    const g = groups[+b.dataset.g];
-    if (b.dataset.act === "set") { dupChoice[groupKey(g)][b.dataset.id] = b.dataset.v; renderDups(); return; }
-    if (b.dataset.act === "resolve") { if (resolveGroup(g, dupChoice[groupKey(g)])) { save(); render(); } return; }
-    if (b.dataset.act === "notdup") { const c = {}; g.ids.forEach(id => c[id] = "keep"); resolveGroup(g, c); save(); render(); return; }
-    if (b.dataset.act === "undo") { undoDup(+b.dataset.i); save(); render(); return; }
-  };
-  const ae = $("#autoExact"); if (ae) ae.onclick = () => { let n = 0; for (const g of exact) { const c = defaultChoice(g); n += g.ids.length - 1; resolveGroup(g, c); } save(); render(); toast(`Removed ${plural(n, "duplicate")}.`); };
-  $("#rescan").onclick = () => { detectDuplicates(); dupChoice = {}; save(); render(); toast("Scan finished."); };
-}
-
-/* ---------- screening ---------- */
-let searchText = "";
-let listLimit = 200;
-function screenList() {
-  const f = S.ui.filter; const q = searchText.trim().toLowerCase();
-  return active().filter(r => {
-    const d = S.decisions[r.id];
-    if (f === "todo" && d) return false;
-    if (["include", "exclude", "maybe"].includes(f) && (!d || d.d !== f)) return false;
-    if (q && !((r.title + " " + r.abstract + " " + r.authors).toLowerCase().includes(q))) return false;
-    return true;
-  });
-}
-function renderScreen() {
-  const v = $("#view-screen");
-  const act = active();
-  if (!act.length) { v.innerHTML = `<div class="panel empty"><h2>Nothing to screen yet</h2><p class="muted">Import CSV files or open a project file from your lead reviewer.</p><button class="primary" onclick="setTab('import')">Go to Import</button></div>`; return; }
-  const counts = { include: 0, exclude: 0, maybe: 0 }; act.forEach(r => { const d = S.decisions[r.id]; if (d) counts[d.d]++; });
-  const done = counts.include + counts.exclude + counts.maybe;
-  const list = screenList();
-  let cur = byId.get(S.ui.cur);
-  if (!cur || S.removed[cur.id]) { cur = list[0] || act.find(r => !S.decisions[r.id]) || act[0]; S.ui.cur = cur.id; }
-  const d = S.decisions[cur.id];
-  const pct = n => (100 * n / act.length).toFixed(2) + "%";
-  const fbtn = (k, label, n) => `<button data-f="${k}" aria-pressed="${S.ui.filter === k}">${label}${n != null ? ` <span class="mono">${n}</span>` : ""}</button>`;
-  const pos = list.findIndex(r => r.id === cur.id);
-  v.innerHTML = `
-  ${S.reviewer ? "" : `<div class="panel" style="border-color:var(--may)"><p><b>Type your name in the Reviewer box at the top</b> before you start, so your decisions file is labelled for the comparison.</p></div>`}
-  <div class="screen">
-    <aside class="listpane">
-      <div class="row" style="justify-content:space-between"><span class="label">Your progress</span><span class="mono muted">${done} / ${act.length}</span></div>
-      <div class="progress" aria-hidden="true"><i style="width:${pct(counts.include)};background:var(--inc)"></i><i style="width:${pct(counts.maybe)};background:var(--may)"></i><i style="width:${pct(counts.exclude)};background:var(--exc)"></i></div>
-      <div class="filters">${fbtn("todo", "To do", act.length - done)}${fbtn("include", "Included", counts.include)}${fbtn("maybe", "Maybe", counts.maybe)}${fbtn("exclude", "Excluded", counts.exclude)}${fbtn("all", "All")}</div>
-      <input type="search" id="search" placeholder="Search titles, abstracts, authors" value="${esc(searchText)}" aria-label="Search records">
-      <div class="reclist" id="reclist">${list.slice(0, listLimit).map(r => { const dd = S.decisions[r.id]; return `<button data-id="${r.id}" class="${r.id === cur.id ? "cur" : ""}"><span class="dot ${dd ? dd.d : ""}"></span><span><span class="t">${esc(r.title || "(no title)")}</span><span class="s">${esc([shortAuthors(r.authors), r.year].filter(Boolean).join(" · "))}</span></span></button>`; }).join("") || `<p class="muted" style="padding:12px">No records match this filter.</p>`}
-      ${list.length > listLimit ? `<button id="more" style="justify-content:center">Show ${Math.min(200, list.length - listLimit)} more</button>` : ""}</div>
-    </aside>
-    <article class="panel reader">
-      <div class="navrow"><span class="label">${pos >= 0 ? `Record ${pos + 1} of ${list.length} in this list` : "Record outside the current filter"}</span>
-        <div class="row"><button id="prev" title="Previous (K or ←)">← Prev</button><button id="next" title="Next (J or →)">Next →</button></div></div>
-      <h1 class="rtitle">${highlight(cur.title || "(no title)")}</h1>
-      <div class="meta">${cur.authors ? `<span>${esc(cur.authors.length > 220 ? cur.authors.slice(0, 220) + "…" : cur.authors)}</span>` : ""}${cur.year ? `<span class="mono">${esc(cur.year)}</span>` : ""}${cur.journal ? `<span>${esc(cur.journal)}</span>` : ""}
-        ${cur.doi ? `<a href="https://doi.org/${encodeURI(cur.doi)}" target="_blank" rel="noopener">doi:${esc(cur.doi)}</a>` : ""}${cur.pmid ? `<a href="https://pubmed.ncbi.nlm.nih.gov/${esc(cur.pmid)}/" target="_blank" rel="noopener">PMID ${esc(cur.pmid)}</a>` : ""}</div>
-      <div class="abstract ${cur.abstract ? "" : "none"}">${cur.abstract ? highlight(cur.abstract) : "No abstract in the imported file."}</div>
-      ${cur.keywords ? `<p class="muted" style="font-size:13px"><span class="label">Keywords</span> ${highlight(cur.keywords)}</p>` : ""}
-      <div class="decide">
-        <button class="inc ${d && d.d === "include" ? "on" : ""}" data-d="include">Include <kbd>I</kbd></button>
-        <button class="may ${d && d.d === "maybe" ? "on" : ""}" data-d="maybe">Maybe <kbd>M</kbd></button>
-        <button class="exc ${d && d.d === "exclude" ? "on" : ""}" data-d="exclude">Exclude <kbd>E</kbd></button>
-      </div>
-      ${d && d.d === "exclude" ? `<div><span class="label">Reason for exclusion (optional)</span><div class="chips" style="margin-top:6px">${S.reasons.map(r => `<button data-reason="${esc(r)}" aria-pressed="${d.reason === r}">${esc(r)}</button>`).join("")}</div></div>` : ""}
-      ${d ? `<label><span class="label">Note</span><textarea id="note" rows="2" placeholder="Optional note for this record">${esc(d.note || "")}</textarea></label>
-        <div class="row"><button id="clear">Clear my decision <kbd>U</kbd></button><span class="muted" style="font-size:12px">Decided ${new Date(d.at).toLocaleString()}</span></div>` : ""}
-      <details><summary class="muted" style="cursor:pointer">Keyboard shortcuts and highlight words</summary>
-        <div style="display:grid;gap:10px;margin-top:10px">
-          <p class="muted"><kbd>I</kbd> include · <kbd>E</kbd> exclude · <kbd>M</kbd> maybe · <kbd>U</kbd> clear · <kbd>J</kbd>/<kbd>→</kbd> next · <kbd>K</kbd>/<kbd>←</kbd> previous. After a decision the next undecided record opens.</p>
-          <label><span class="label">Highlight green (inclusion words, comma separated)</span><input type="text" id="kwInc" value="${esc(S.keywords.inc.join(", "))}" style="width:100%"></label>
-          <label><span class="label">Highlight red (exclusion words)</span><input type="text" id="kwExc" value="${esc(S.keywords.exc.join(", "))}" style="width:100%"></label>
-          <label><span class="label">Exclusion reasons (comma separated)</span><input type="text" id="reasonsIn" value="${esc(S.reasons.join(", "))}" style="width:100%"></label>
-        </div></details>
-    </article>
-  </div>`;
-  v.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { S.ui.filter = b.dataset.f; listLimit = 200; save(); renderScreen(); });
-  const s = $("#search"); s.oninput = () => { searchText = s.value; listLimit = 200; renderScreen(); const n = $("#search"); n.focus(); n.setSelectionRange(n.value.length, n.value.length); };
-  $("#reclist").onclick = ev => { const b = ev.target.closest("button[data-id]"); if (b) { S.ui.cur = b.dataset.id; save(); renderScreen(); } };
-  const more = $("#more"); if (more) more.onclick = ev => { ev.stopPropagation(); listLimit += 200; renderScreen(); };
-  $("#prev").onclick = () => step(-1); $("#next").onclick = () => step(1);
-  v.querySelectorAll("[data-d]").forEach(b => b.onclick = () => choose(b.dataset.d));
-  v.querySelectorAll("[data-reason]").forEach(b => b.onclick = () => { const dd = S.decisions[cur.id]; dd.reason = dd.reason === b.dataset.reason ? "" : b.dataset.reason; save(); renderScreen(); });
-  const note = $("#note"); if (note) note.onchange = () => { S.decisions[cur.id].note = note.value; save(); };
-  const clr = $("#clear"); if (clr) clr.onclick = () => { decide(cur.id, null); render(); };
-  const kw = (id, fn) => { const el = $(id); el.onchange = () => { fn(el.value.split(",").map(x => x.trim()).filter(Boolean)); save(); renderScreen(); }; };
-  kw("#kwInc", l => S.keywords.inc = l); kw("#kwExc", l => S.keywords.exc = l); kw("#reasonsIn", l => S.reasons = l.length ? l : DEFAULT_REASONS.slice());
-  const curBtn = $("#reclist .cur"); if (curBtn) curBtn.scrollIntoView({ block: "nearest" });
-}
-function step(dir) {
-  const list = screenList(); if (!list.length) return;
-  let i = list.findIndex(r => r.id === S.ui.cur);
-  i = i < 0 ? 0 : Math.min(list.length - 1, Math.max(0, i + dir));
-  S.ui.cur = list[i].id; save(); renderScreen();
-}
-function choose(dec) {
-  const id = S.ui.cur; const prev = S.decisions[id];
-  if (prev && prev.d === dec) return;
-  // pick the next undecided record before this one leaves the "to do" list
-  const act = active(); const i = act.findIndex(r => r.id === id);
-  let next = null; for (let k = 1; k <= act.length; k++) { const r = act[(i + k) % act.length]; if (!S.decisions[r.id] && r.id !== id) { next = r.id; break; } }
-  decide(id, dec);
-  if (dec !== "exclude" && next && S.ui.filter !== "all") S.ui.cur = next;
-  if (dec === "exclude" && next) excludeNext = next; else excludeNext = null;
-  render();
-}
-let excludeNext = null; // after Exclude we stay so a reason can be picked; J/Next or another decision moves on
-
-document.addEventListener("keydown", ev => {
-  if (S.ui.tab !== "screen" || ev.metaKey || ev.ctrlKey || ev.altKey) return;
-  const t = ev.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
-  const k = ev.key.toLowerCase();
-  if (k === "i") choose("include"); else if (k === "e") choose("exclude"); else if (k === "m") choose("maybe");
-  else if (k === "u") { decide(S.ui.cur, null); render(); }
-  else if (k === "j" || ev.key === "ArrowRight") { if (excludeNext && S.ui.filter !== "all") { S.ui.cur = excludeNext; excludeNext = null; save(); renderScreen(); } else step(1); }
-  else if (k === "k" || ev.key === "ArrowLeft") step(-1);
-  else return;
-  ev.preventDefault();
-});
-
-/* ---------- compare ---------- */
-async function importDecisions(data) {
-  if (data.type !== "twofold-decisions" || !data.decisions) { toast("That is not a decisions file."); return; }
-  if (data.projectId && S.projectId && data.projectId !== S.projectId && S.records.length) toast("Note: this decisions file came from a different project file. Only matching records are compared.");
-  let name = (data.reviewer || "Reviewer").trim();
-  if (name === S.reviewer) { toast(`That file is your own (${name}). Your decisions on this device are already included.`); return; }
-  S.others[name] = { decisions: data.decisions, importedAt: new Date().toISOString(), exportedAt: data.exportedAt };
-  if (!S.records.length && Array.isArray(data.records)) { S.records = data.records; }
-  save(); toast(`Imported ${plural(Object.keys(data.decisions).length, "decision")} from ${name}.`);
-}
-function compareData() {
-  const revs = reviewers().filter(r => Object.keys(r.decisions).length || r.key === "__me");
-  if (revs.length < 2) return null;
-  let A = revs.find(r => r.key === S.ui.cmpA) || revs[0];
-  let B = revs.find(r => r.key === S.ui.cmpB && r.key !== A.key) || revs.find(r => r.key !== A.key);
-  const rows = []; const open = [];
-  const cats = ["include", "exclude", "maybe"]; const tab = {}; cats.forEach(a => cats.forEach(b => tab[a + b] = 0));
-  let both = 0, onlyOne = 0, none = 0;
-  for (const r of active()) {
-    const a = A.decisions[r.id], b = B.decisions[r.id];
-    let status;
-    if (a && b) { both++; tab[a.d + b.d]++; status = a.d === b.d ? (a.d === "maybe" ? "bothmaybe" : "agree") : "conflict"; }
-    else if (a || b) { onlyOne++; status = "single"; } else { none++; status = "none"; }
-    const fin = S.final[r.id] || (status === "agree" ? a.d : null);
-    const row = { r, a, b, status, fin }; rows.push(row);
-    if ((status === "conflict" || status === "bothmaybe") && !S.final[r.id]) open.push(row);
-  }
-  const po = both ? cats.reduce((s, c) => s + tab[c + c], 0) / both : 0;
-  const pe = both ? cats.reduce((s, c) => s + (cats.reduce((x, k) => x + tab[c + k], 0) / both) * (cats.reduce((x, k) => x + tab[k + c], 0) / both), 0) : 0;
-  const kappa = both && pe < 1 ? (po - pe) / (1 - pe) : (both ? 1 : null);
-  // binary kappa: maybe counts as include (the usual title/abstract convention)
-  const bin = x => x === "exclude" ? "e" : "i";
-  let bt = { ii: 0, ie: 0, ei: 0, ee: 0 }; rows.forEach(x => { if (x.a && x.b) bt[bin(x.a.d) + bin(x.b.d)]++; });
-  const bpo = both ? (bt.ii + bt.ee) / both : 0; const pAi = both ? (bt.ii + bt.ie) / both : 0, pBi = both ? (bt.ii + bt.ei) / both : 0;
-  const bpe = pAi * pBi + (1 - pAi) * (1 - pBi); const bkappa = both && bpe < 1 ? (bpo - bpe) / (1 - bpe) : (both ? 1 : null);
-  return { revs, A, B, rows, open, tab, both, onlyOne, none, po, kappa, bkappa };
-}
-function kappaWord(k) { if (k == null) return ""; if (k < 0.2) return "slight"; if (k < 0.4) return "fair"; if (k < 0.6) return "moderate"; if (k < 0.8) return "substantial"; return "almost perfect"; }
-function pill(d) { return d ? `<span class="pill ${d.d}">${d.d[0].toUpperCase() + d.d.slice(1)}</span>` : `<span class="pill">Not screened</span>`; }
-function renderCompare() {
-  const v = $("#view-compare");
-  const imported = Object.entries(S.others);
-  const head = `<div class="panel">
-    <div class="row" style="justify-content:space-between"><div><h2>Compare reviewers</h2><p class="muted">Import the decisions file each other reviewer exported. Decisions stay blind until you open this tab.</p></div>
-    <label class="btn primary">Import decisions file<input type="file" id="decFile" accept=".json,application/json" multiple></label></div>
-    ${imported.length ? `<div class="row">${imported.map(([n, o]) => `<span class="pill reason">${esc(n)} · ${Object.keys(o.decisions).length} decisions <button data-rm="${esc(n)}" style="padding:0 4px;border:0;background:none" aria-label="Remove ${esc(n)}">×</button></span>`).join("")}</div>` : ""}
-  </div>`;
-  const c = compareData();
-  if (!c) { v.innerHTML = head + `<div class="panel empty"><h3>Waiting for a second reviewer</h3><p class="muted">Your own decisions on this device count as one reviewer. Import at least one other reviewer's decisions file to compare.</p></div>`; bindCompareHead(); return; }
-  const sel = (id, cur) => `<select id="${id}">${c.revs.map(r => `<option value="${esc(r.key)}" ${r.key === cur.key ? "selected" : ""}>${esc(r.name)}</option>`).join("")}</select>`;
-  const cats = ["include", "maybe", "exclude"]; const L = { include: "Include", maybe: "Maybe", exclude: "Exclude" };
-  const finInc = c.rows.filter(x => x.fin === "include").length, finExc = c.rows.filter(x => x.fin === "exclude").length;
-  const f = S.ui.cmpFilter;
-  const shown = c.rows.filter(x => f === "open" ? c.open.includes(x) : f === "resolved" ? S.final[x.r.id] : f === "agree" ? x.status === "agree" : f === "single" ? x.status === "single" || x.status === "none" : true);
-  v.innerHTML = head + `
-  <div class="panel">
-    <div class="row"><label class="row"><span class="label">Reviewer 1</span>${sel("cmpA", c.A)}</label><label class="row"><span class="label">Reviewer 2</span>${sel("cmpB", c.B)}</label></div>
-    <div class="stats">
-      <div class="stat"><div class="label">Screened by both</div><div class="n">${c.both}</div></div>
-      <div class="stat"><div class="label">Agreement</div><div class="n">${c.both ? (c.po * 100).toFixed(1) + "%" : "–"}</div></div>
-      <div class="stat"><div class="label">Cohen's κ (3 categories)</div><div class="n">${c.kappa == null ? "–" : c.kappa.toFixed(2)}</div><div class="muted" style="font-size:12px">${kappaWord(c.kappa)}</div></div>
-      <div class="stat"><div class="label">κ include/exclude</div><div class="n">${c.bkappa == null ? "–" : c.bkappa.toFixed(2)}</div><div class="muted" style="font-size:12px">maybe counted as include</div></div>
-      <div class="stat"><div class="label">Need a decision</div><div class="n" style="color:var(--may)">${c.open.length}</div></div>
-      <div class="stat"><div class="label">Final include / exclude</div><div class="n"><span style="color:var(--inc)">${finInc}</span> / <span style="color:var(--exc)">${finExc}</span></div></div>
-    </div>
-    <div class="tablewrap" style="max-width:520px"><table><thead><tr><th>${esc(c.A.name)} ↓ / ${esc(c.B.name)} →</th>${cats.map(k => `<th>${L[k]}</th>`).join("")}</tr></thead><tbody>
-      ${cats.map(a => `<tr><th>${L[a]}</th>${cats.map(b => `<td class="mono" style="${a === b ? "font-weight:600" : ""}">${c.tab[a + b]}</td>`).join("")}</tr>`).join("")}
-    </tbody></table></div>
-    ${c.onlyOne || c.none ? `<p class="muted">${plural(c.onlyOne, "record")} screened by only one reviewer, ${c.none} by neither.</p>` : ""}
-  </div>
-  <div class="panel">
-    <div class="filters">${[["open", "Need a decision", c.open.length], ["resolved", "Resolved", Object.keys(S.final).filter(id => byId.has(id) && !S.removed[id]).length], ["agree", "Agreed", c.rows.filter(x => x.status === "agree").length], ["single", "Not screened by both", c.onlyOne + c.none], ["all", "All", c.rows.length]].map(([k, l, n]) => `<button data-cf="${k}" aria-pressed="${f === k}">${l} <span class="mono">${n}</span></button>`).join("")}</div>
-    <div>${shown.slice(0, 150).map(x => `<div class="conf" data-id="${x.r.id}">
-      <div class="ct" data-open="${x.r.id}" title="Open in screening view">${esc(x.r.title || "(no title)")}</div>
-      <div class="meta">${esc([shortAuthors(x.r.authors), x.r.year, x.r.journal].filter(Boolean).join(" · "))}</div>
-      <div class="votes"><span>${esc(c.A.name)}: ${pill(x.a)} ${x.a && x.a.reason ? `<span class="muted">${esc(x.a.reason)}</span>` : ""}${x.a && x.a.note ? ` <span class="muted">“${esc(x.a.note)}”</span>` : ""}</span>
-        <span>${esc(c.B.name)}: ${pill(x.b)} ${x.b && x.b.reason ? `<span class="muted">${esc(x.b.reason)}</span>` : ""}${x.b && x.b.note ? ` <span class="muted">“${esc(x.b.note)}”</span>` : ""}</span></div>
-      ${x.r.abstract ? `<details><summary>Abstract</summary><p class="abstract" style="font-size:15px;margin-top:6px">${highlight(x.r.abstract)}</p></details>` : ""}
-      <div class="row"><span class="label">Final</span>
-        <button data-fin="include" data-id="${x.r.id}" class="${x.fin === "include" ? "primary" : ""}" style="${x.fin === "include" ? "background:var(--inc);border-color:var(--inc)" : ""}">Include</button>
-        <button data-fin="exclude" data-id="${x.r.id}" style="${x.fin === "exclude" ? "background:var(--exc);border-color:var(--exc);color:var(--surface)" : ""}">Exclude</button>
-        ${S.final[x.r.id] ? `<button data-fin="" data-id="${x.r.id}">Reset</button>` : ""}
-        ${x.fin ? `<span class="muted" style="font-size:12px">${S.final[x.r.id] ? "decided in consensus" : "both reviewers agreed"}</span>` : ""}</div>
-    </div>`).join("") || `<p class="muted">Nothing in this list.</p>`}
-    ${shown.length > 150 ? `<p class="muted">Showing 150 of ${shown.length}. Resolve some to see more.</p>` : ""}</div>
-  </div>`;
-  bindCompareHead();
-  $("#cmpA").onchange = e => { S.ui.cmpA = e.target.value; save(); renderCompare(); };
-  $("#cmpB").onchange = e => { S.ui.cmpB = e.target.value; save(); renderCompare(); };
-  v.querySelectorAll("[data-cf]").forEach(b => b.onclick = () => { S.ui.cmpFilter = b.dataset.cf; save(); renderCompare(); });
-  v.querySelectorAll("[data-fin]").forEach(b => b.onclick = () => { if (b.dataset.fin) S.final[b.dataset.id] = b.dataset.fin; else delete S.final[b.dataset.id]; save(); render(); });
-  v.querySelectorAll("[data-open]").forEach(el => el.onclick = () => { S.ui.cur = el.dataset.open; S.ui.filter = "all"; setTab("screen"); });
-}
-function bindCompareHead() {
-  $("#decFile").onchange = async ev => { for (const f of ev.target.files) { try { await importDecisions(JSON.parse(await readFile(f))); } catch (e) { toast("Could not read " + f.name); } } render(); };
-  document.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { delete S.others[b.dataset.rm]; save(); render(); });
-}
-
-/* ---------- export ---------- */
-function renderExport() {
-  const v = $("#view-export");
-  const act = active(); const c = compareData();
-  const finInc = c ? c.rows.filter(x => x.fin === "include").length : 0, finExc = c ? c.rows.filter(x => x.fin === "exclude").length : 0;
-  const myN = Object.keys(S.decisions).length;
-  v.innerHTML = `
-  <div class="grid2">
-    <div class="panel"><h3>Project file for the other reviewer</h3>
-      <p class="muted">Records plus duplicate decisions, without anyone's screening decisions, so screening stays blind. Send it to the second reviewer; they open it on the Import tab.</p>
-      <div><button class="primary" id="exProject" ${S.records.length ? "" : "disabled"}>Export project file</button></div></div>
-    <div class="panel"><h3>My decisions</h3>
-      <p class="muted">${plural(myN, "decision")} by ${esc(S.reviewer || "you (no name set)")}. Send this file to the lead reviewer, who imports it on the Compare tab. It is also your backup.</p>
-      <div><button class="primary" id="exMine" ${myN ? "" : "disabled"}>Export my decisions</button></div></div>
-    <div class="panel"><h3>Screening results (CSV)</h3>
-      <p class="muted">Every record with each reviewer's decision, reason and note, the agreement status and the final decision. Opens in Excel or Google Sheets.</p>
-      <div class="row"><button id="exResults" ${act.length ? "" : "disabled"}>Export all results</button><button id="exIncluded" ${finInc ? "" : "disabled"}>Export final includes only</button><button id="exDups" ${Object.keys(S.removed).length ? "" : "disabled"}>Export removed duplicates</button></div></div>
-    <div class="panel"><h3>PRISMA numbers</h3>
-      <div class="tablewrap"><table><tbody>
-        <tr><td>Records identified</td><td class="mono">${S.records.length}</td></tr>
-        ${S.sources.map(s => `<tr><td class="muted">&nbsp;&nbsp;${esc(s.name)}</td><td class="mono muted">${s.count}</td></tr>`).join("")}
-        <tr><td>Duplicates removed</td><td class="mono">${Object.keys(S.removed).length}</td></tr>
-        <tr><td>Records screened (title/abstract)</td><td class="mono">${act.length}</td></tr>
-        <tr><td>Records excluded</td><td class="mono">${c ? finExc : "–"}</td></tr>
-        <tr><td>Records sought for full-text retrieval</td><td class="mono">${c ? finInc : "–"}</td></tr>
-        ${c && (c.open.length || c.onlyOne || c.none) ? `<tr><td>Still undecided</td><td class="mono" style="color:var(--may)">${act.length - finInc - finExc}</td></tr>` : ""}
-      </tbody></table></div>
-      ${c ? "" : `<p class="muted" style="font-size:13px">Excluded and included counts appear once two reviewers' decisions are compared.</p>`}</div>
-  </div>`;
-  const base = slug(S.name);
-  $("#exProject").onclick = () => saveFile(base + "-project.json", JSON.stringify({ type: "twofold-project", version: 1, projectId: S.projectId, name: S.name, exportedAt: new Date().toISOString(), records: S.records, sources: S.sources, dupPairs: S.dupPairs, removed: S.removed, notDup: S.notDup, dupHistory: S.dupHistory, keywords: S.keywords, reasons: S.reasons }));
-  $("#exMine").onclick = () => saveFile(base + "-decisions-" + slug(S.reviewer || "reviewer") + ".json", JSON.stringify({ type: "twofold-decisions", version: 1, projectId: S.projectId, project: S.name, reviewer: S.reviewer || "Reviewer", exportedAt: new Date().toISOString(), decisions: S.decisions }));
-  const resultRows = only => {
-    const revs = reviewers(); const cd = compareData();
-    const byRow = new Map(cd ? cd.rows.map(x => [x.r.id, x]) : []);
-    const finOf = id => { const x = byRow.get(id); return x ? (x.fin || "") : (S.final[id] || ""); };
-    const statusOf = id => { const x = byRow.get(id); return x ? x.status : ""; };
-    const header = ["id", "title", "authors", "year", "journal", "doi", "pmid", "abstract", "source"];
-    revs.forEach(r => header.push(r.name.replace(" (this device)", "") + " decision", "reason", "note"));
-    header.push("agreement", "final decision");
-    const rows = [header];
-    for (const r of act) {
-      const fin = finOf(r.id); if (only && fin !== "include") continue;
-      const row = [r.id, r.title, r.authors, r.year, r.journal, r.doi, r.pmid, r.abstract, r.source];
-      revs.forEach(rv => { const d = rv.decisions[r.id]; row.push(d ? d.d : "", d ? d.reason : "", d ? d.note : ""); });
-      row.push(statusOf(r.id).replace("bothmaybe", "both maybe").replace("single", "one reviewer only").replace("none", "not screened"), fin);
-      rows.push(row);
-    }
-    return toCSV(rows);
-  };
-  $("#exResults").onclick = () => saveFile(base + "-screening-results.csv", resultRows(false));
-  $("#exIncluded").onclick = () => saveFile(base + "-included.csv", resultRows(true));
-  $("#exDups").onclick = () => { const rows = [["removed id", "title", "authors", "year", "doi", "source", "kept id", "kept title"]]; for (const [id, keep] of Object.entries(S.removed)) { const r = byId.get(id), k = byId.get(keep); if (r) rows.push([id, r.title, r.authors, r.year, r.doi, r.source, keep, k ? k.title : ""]); } saveFile(base + "-duplicates-removed.csv", toCSV(rows)); };
-}
-
-/* ---------- example data (clearly fictional) ---------- */
-function loadExample() {
+async function loadExample() {
   const header = ["Title", "Abstract", "Authors", "Year", "Journal", "DOI"];
   const rows = [
     ["EXAMPLE: Effect of early mobilisation after hip fracture surgery: a randomised controlled trial", "Example record for trying the tool. Background: early mobilisation may shorten hospital stay. Methods: 240 adults aged over 65 were randomized to mobilisation within 24 hours or usual care. Results: length of stay fell by 1.8 days. Conclusion: early mobilisation is safe and shortens stay.", "Example A; Sample B", "2021", "Example Journal of Orthopaedics", "10.0000/example.001"],
@@ -863,21 +836,350 @@ function loadExample() {
     ["EXAMPLE: Case report: periprosthetic fracture during early rehabilitation", "Example record. We describe a single patient who sustained a fracture during rehabilitation.", "Demo G", "2019", "Example Case Reports", "10.0000/example.005"],
     ["EXAMPLE: Accelerated rehabilitation protocol versus standard care after hip fracture: a pilot randomised trial", "Example record. Sixty patients were randomised to an accelerated rehabilitation protocol or standard care. Feasibility outcomes were recruitment and adherence.", "Demo H", "2024", "Example Pilot Studies", "10.0000/example.006"]
   ];
-  S.name = "Example: early mobilisation after hip fracture";
-  addRecords(rows, header, autoMap(header), "example.csv");
-  reindex(); detectDuplicates(); save(); toast("Example set loaded. Resolve the duplicates, then screen."); setTab("dups");
+  addRecords(rows, autoMap(header), "example.csv"); reindex(); detectDuplicates();
+  await saveRecords(); toast("Example set loaded. Resolve the duplicates next."); setTab("dups");
 }
 
-/* ---------- boot ---------- */
-document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => setTab(b.dataset.tab));
-$("#reviewerName").addEventListener("input", e => { S.reviewer = e.target.value.trim(); save(); });
-$("#reviewerName").addEventListener("change", () => render());
-(async () => {
-  const saved = await store.get("state");
-  if (saved && saved.v === 1) S = Object.assign(freshState(), saved, { ui: Object.assign(freshState().ui, saved.ui || {}) });
+/* Duplicates (lead) */
+function renderDups(v) {
+  const groups = dupGroups(); const exact = groups.filter(g => g.exact);
+  const reasonText = p => p.reason === "doi" ? "Same DOI" : p.reason === "pmid" ? "Same PMID" : p.reason === "title" ? "Identical title" : Math.round(p.score * 100) + "% similar title";
+  v.innerHTML = `
+  <div class="panel">
+    <div class="row spread">
+      <div><h2>Duplicates</h2><p class="muted">${groups.length ? plural(groups.length, "group") + " to check. Keep one record of each and remove the copies, or mark them as different papers." : R.length ? "No open duplicate groups." : "Import records first."}</p></div>
+      <div class="row">${exact.length ? `<button class="primary" id="autoExact">Remove all exact matches (${exact.length})</button>` : ""}<button id="rescan" ${R.length ? "" : "disabled"}>Scan again</button></div>
+    </div>
+    <p class="muted small">Exact matches share a DOI, a PMID or an identical title; auto-removal keeps the most complete record. Similar titles always need your decision. If papers are already assigned, update the assignment on the Team tab afterwards.</p>
+  </div>
+  ${groups.slice(0, 60).map((g, gi) => {
+    const k = groupKey(g); const choice = dupChoice[k] || (dupChoice[k] = defaultChoice(g));
+    return `<div class="panel group">
+      <div class="row spread"><div class="row">${[...new Set(g.pairs.map(reasonText))].map(r => `<span class="pill ${g.exact ? "exclude" : "maybe"}">${esc(r)}</span>`).join("")}<span class="muted">${g.ids.length} records</span></div>
+      <div class="row"><button class="primary" data-act="resolve" data-g="${gi}">Remove marked duplicates</button><button data-act="notdup" data-g="${gi}">Not duplicates</button></div></div>
+      <div class="members">${g.ids.map(id => { const r = byId.get(id); const c = choice[id]; return `<div class="member ${c === "drop" ? "dup" : "keep"}">
+        <div class="row spread"><span class="label">${esc(r.source || "")}</span>
+        <span class="seg"><button class="k" aria-pressed="${c === "keep"}" data-act="set" data-g="${gi}" data-id="${id}" data-v="keep">Keep</button><button class="d" aria-pressed="${c === "drop"}" data-act="set" data-g="${gi}" data-id="${id}" data-v="drop">Duplicate</button></span></div>
+        <div class="mt">${esc(r.title || "(no title)")}</div>
+        <div class="meta">${r.authors ? `<span>${esc(shortAuthors(r.authors))}</span>` : ""}${r.year ? `<span class="mono">${esc(r.year)}</span>` : ""}${r.journal ? `<span>${esc(r.journal)}</span>` : ""}${r.doi ? `<span class="mono">${esc(r.doi)}</span>` : ""}</div>
+        <div class="ab">${esc(r.abstract || "No abstract")}</div></div>`; }).join("")}</div></div>`;
+  }).join("")}
+  ${groups.length > 60 ? `<p class="muted">Showing the first 60 groups. Resolve these to see more.</p>` : ""}
+  ${D.dupHistory.length ? `<div class="panel"><h3>Decisions made</h3><div class="tablewrap"><table><thead><tr><th>Kept</th><th>Removed</th><th></th></tr></thead><tbody>
+    ${D.dupHistory.map((a, i) => ({ a, i })).reverse().slice(0, 200).map(({ a, i }) => { const r = byId.get(a.keep); return `<tr><td class="clip">${esc(r ? r.title : a.keep)}</td><td class="mono">${a.removed.length ? a.removed.length + " removed" : "kept all (not duplicates)"}</td><td><button data-act="undo" data-i="${i}">Undo</button></td></tr>`; }).join("")}
+  </tbody></table></div></div>` : ""}`;
+  v.onclick = ev => {
+    const b = ev.target.closest("button[data-act]"); if (!b) return; const g = groups[+b.dataset.g];
+    if (b.dataset.act === "set") { dupChoice[groupKey(g)][b.dataset.id] = b.dataset.v; render(); return; }
+    if (b.dataset.act === "resolve") { if (resolveGroup(g, dupChoice[groupKey(g)])) { saveDups(); render(); } return; }
+    if (b.dataset.act === "notdup") { const c = {}; g.ids.forEach(id => c[id] = "keep"); resolveGroup(g, c); saveDups(); render(); return; }
+    if (b.dataset.act === "undo") { undoDup(+b.dataset.i); saveDups(); render(); }
+  };
+  const ae = $("#autoExact"); if (ae) ae.onclick = () => { let n = 0; for (const g of exact) { n += g.ids.length - 1; resolveGroup(g, defaultChoice(g)); } saveDups(); render(); toast(`Removed ${plural(n, "duplicate")}.`); };
+  $("#rescan").onclick = () => { detectDuplicates(); dupChoice = {}; saveDups(); render(); toast("Scan finished."); };
+}
+
+/* Team & assignment (lead) */
+let teamOff = null, teamK = 2, teamShuffle = true; // teamOff: emails unticked under "Who screens"
+function renderTeam(v) {
+  const emails = P.emails || []; const st = assignmentStatus();
+  if (!teamOff) teamOff = new Set(A ? emails.filter(e => !A.emails.includes(e)) : []);
+  const teamSel = emails.filter(e => !teamOff.has(e));
+  const link = location.origin + location.pathname + "#p-" + PID;
+  const memberByEmail = {}; Object.values(P.members || {}).forEach(m => memberByEmail[m.email] = m);
+  const groups = groupSummary();
+  const maxK = Math.max(1, Math.min(4, teamSel.length));
+  const k = Math.min(teamK, maxK);
+  const hasPlan = !!(A && Object.keys(A.map).length);
+  v.innerHTML = `
+  <div class="panel">
+    <div><h2>Team</h2><p class="muted">Add each reviewer's Google email. They sign in at the link below with that account and see only the papers you assign them.</p></div>
+    <div class="copybox"><input type="text" id="inviteLink" value="${esc(link)}" readonly aria-label="Link to this review"><button id="copyLink">Copy link</button></div>
+    <form class="row" id="addForm"><input type="email" id="addEmail" placeholder="friend@gmail.com" style="flex:1;min-width:200px" required><button class="primary">Add reviewer</button></form>
+    <div class="tablewrap"><table><thead><tr><th>Reviewer</th><th>Assigned</th><th>Progress</th><th></th></tr></thead><tbody>
+      ${emails.map(e => { const m = memberByEmail[e]; const n = (P.assignCounts || {})[e] || 0; const done = m && m.total ? m.done || 0 : 0;
+        return `<tr><td>${m ? esc(m.name) + `<br><span class="muted small">${esc(e)}</span>` : `${esc(e)}<br><span class="muted small">hasn't signed in yet</span>`}${e === me.email ? ` <span class="pill lead">Lead</span>` : ""}</td>
+        <td class="mono">${n}</td><td>${n ? `<div class="row"><span class="bar" style="width:100px"><i style="width:${(100 * done / n).toFixed(1)}%"></i></span><span class="mono small">${done}/${n}</span></div>` : `<span class="muted">–</span>`}</td>
+        <td>${e === me.email ? "" : `<button class="link" data-rm="${esc(e)}">Remove</button>`}</td></tr>`; }).join("")}
+    </tbody></table></div>
+    <div id="rmArea"></div>
+  </div>
+  <div class="panel">
+    <div><h2>Assign papers</h2>
+    <p class="muted">${plural(st.total, "paper")} to screen · ${st.assigned} assigned · <b>${st.unassigned} not assigned</b>${st.stale ? ` · <b>${st.stale} out of date</b> (removed as duplicates or reviewer left)` : ""}</p></div>
+    ${!st.total ? `<p class="note">Import records and remove duplicates first.</p>` : `
+    <div class="row"><span class="label">Who screens</span>${emails.map(e => `<label class="check"><input type="checkbox" data-sel="${esc(e)}" ${teamSel.includes(e) ? "checked" : ""}>${esc(nameOf(e))}</label>`).join("")}</div>
+    <div class="row"><label class="row"><span class="label">Reviewers per paper</span><select id="kSel">${[1, 2, 3, 4].filter(n => n <= maxK).map(n => `<option ${n === k ? "selected" : ""}>${n}</option>`).join("")}</select></label>
+      <label class="check"><input type="checkbox" id="shufChk" ${teamShuffle ? "checked" : ""}>Shuffle papers before splitting</label></div>
+    <p class="muted small">${k > 1 && teamSel.length % k === 0 ? `${teamSel.length} reviewers make ${teamSel.length / k} fixed groups of ${k}; each group gets an equal share of the papers.` : k > 1 ? `${teamSel.length} reviewers don't split into equal groups of ${k}, so pairings rotate to keep the workload even.` : teamSel.length ? "Each paper is screened by one person." : "Tick who screens."}</p>
+    <div class="row">
+      ${hasPlan ? `<button class="primary" id="assignNew" ${st.unassigned || st.stale ? "" : "disabled"}>Assign the ${st.unassigned + st.stale} remaining papers</button><button id="redoBtn">Redo all assignments</button>`
+        : `<button class="primary" id="assignAll" ${teamSel.length ? "" : "disabled"}>Assign ${plural(st.total, "paper")}</button>`}
+    </div>
+    <div id="redoArea"></div>`}
+  </div>
+  ${hasPlan ? `<div class="panel"><h3>Current assignment</h3>
+    <div class="tablewrap"><table><thead><tr><th>Screened by</th><th>Papers</th><th>Paper numbers</th></tr></thead><tbody>
+      ${groups.map(g => `<tr><td>${g.key.split(" + ").map(e => esc(nameOf(e))).join(" + ")}</td><td class="mono">${g.n}</td><td class="mono small">${esc(g.ranges)}</td></tr>`).join("")}
+    </tbody></table></div>
+    <details><summary class="muted" style="cursor:pointer">Assign a range by hand</summary>
+      <div class="row" style="margin-top:10px"><label class="row">From #<input type="number" id="rFrom" min="1" max="${A.order.length}" value="1"></label><label class="row">to #<input type="number" id="rTo" min="1" max="${A.order.length}" value="${A.order.length}"></label></div>
+      <div class="row" style="margin-top:8px"><span class="label">Screened by</span>${emails.map(e => `<label class="check"><input type="checkbox" data-r="${esc(e)}">${esc(nameOf(e))}</label>`).join("")}</div>
+      <div class="row" style="margin-top:8px"><button id="rApply">Apply to this range</button><span class="muted small">Replaces who screens these papers. Decisions already made are kept.</span></div>
+    </details>
+  </div>` : ""}
+  <div class="panel"><div class="row spread"><div><h3>Screening settings</h3><p class="muted small">Highlight words and exclusion reasons apply to everyone.</p></div></div>
+    <label><span class="label">Highlight green (inclusion words, comma separated)</span><input type="text" id="kwInc" value="${esc((P.keywords || DEFAULT_KW).inc.join(", "))}" style="width:100%"></label>
+    <label><span class="label">Highlight red (exclusion words)</span><input type="text" id="kwExc" value="${esc((P.keywords || DEFAULT_KW).exc.join(", "))}" style="width:100%"></label>
+    <label><span class="label">Exclusion reasons</span><input type="text" id="reasonsIn" value="${esc((P.reasons || DEFAULT_REASONS).join(", "))}" style="width:100%"></label>
+  </div>`;
+  $("#copyLink").onclick = () => { const i = $("#inviteLink"); navigator.clipboard.writeText(i.value).then(() => toast("Link copied"), () => { i.select(); toast("Press Ctrl+C to copy"); }); };
+  $("#addForm").onsubmit = ev => {
+    ev.preventDefault(); const e = $("#addEmail").value.trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) { toast("Type a full email address."); return; }
+    if (emails.includes(e)) { toast("Already in the team."); return; }
+    saveProject({ emails: FB.arrayUnion(e) }).then(() => toast(`Added ${e}. Send them the link.`));
+  };
+  v.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => {
+    const e = b.dataset.rm; const n = (P.assignCounts || {})[e] || 0;
+    $("#rmArea").innerHTML = `<div class="confirm"><p>Remove ${esc(e)}? They lose access now.${n ? ` Their ${n} papers become out of date; reassign them afterwards. Their decisions are kept.` : ""}</p><div class="row"><button class="danger" id="rmYes">Remove</button><button id="rmNo">Cancel</button></div></div>`;
+    $("#rmYes").onclick = () => saveProject({ emails: FB.arrayRemove(e) }); $("#rmNo").onclick = render;
+  });
+  v.querySelectorAll("[data-sel]").forEach(c => c.onchange = () => { if (c.checked) teamOff.delete(c.dataset.sel); else teamOff.add(c.dataset.sel); render(); });
+  const kSel = $("#kSel"); if (kSel) kSel.onchange = () => { teamK = +kSel.value; render(); };
+  const sh = $("#shufChk"); if (sh) sh.onchange = () => { teamShuffle = sh.checked; };
+  const go = redo => { if (!teamSel.length) { toast("Tick who screens."); return; } saveAssignment(planAssignment({ emails: teamSel, k, shuffleNew: teamShuffle, redo })); };
+  const aa = $("#assignAll"); if (aa) aa.onclick = () => go(true);
+  const an = $("#assignNew"); if (an) an.onclick = () => { if (A && A.k !== k) { toast(`Current papers use ${A.k} reviewers each. Choose ${A.k}, or redo all assignments.`, 4500); return; } go(false); };
+  const rd = $("#redoBtn"); if (rd) rd.onclick = () => {
+    $("#redoArea").innerHTML = `<div class="confirm"><p>Redo every assignment? Papers may move to different reviewers. Decisions already made stay saved, but only decisions by a paper's new reviewers count in Compare.</p><div class="row"><button class="danger" id="redoYes">Redo all</button><button id="redoNo">Cancel</button></div></div>`;
+    $("#redoYes").onclick = () => go(true); $("#redoNo").onclick = render;
+  };
+  const ra = $("#rApply"); if (ra) ra.onclick = () => {
+    const from = +$("#rFrom").value, to = +$("#rTo").value; const who = [...v.querySelectorAll("[data-r]")].filter(c => c.checked).map(c => c.dataset.r);
+    if (!(from >= 1 && to >= from && to <= A.order.length)) { toast(`Pick a range between 1 and ${A.order.length}.`); return; }
+    if (!who.length) { toast("Pick who screens these papers."); return; }
+    const map = Object.assign({}, A.map); for (let i = from - 1; i < to; i++) map[A.order[i]] = who.slice();
+    const all = [...new Set([...A.emails, ...who])];
+    saveAssignment({ order: A.order, map, k: A.k, emails: all });
+  };
+  const kw = (id, fn) => { const el = $(id); el.onchange = () => saveProject(fn(el.value.split(",").map(x => x.trim()).filter(Boolean))); };
+  kw("#kwInc", l => ({ keywords: { inc: l, exc: (P.keywords || DEFAULT_KW).exc } }));
+  kw("#kwExc", l => ({ keywords: { inc: (P.keywords || DEFAULT_KW).inc, exc: l } }));
+  kw("#reasonsIn", l => ({ reasons: l.length ? l : DEFAULT_REASONS }));
+}
+
+/* Screening (everyone) */
+function screenList() {
+  const f = ui.filter; const q = ui.search.trim().toLowerCase();
+  return MY.filter(r => {
+    const d = DEC[r.id];
+    if (f === "todo" && d) return false;
+    if (["include", "exclude", "maybe"].includes(f) && (!d || d.d !== f)) return false;
+    if (q && !((r.title + " " + r.abstract + " " + r.authors).toLowerCase().includes(q))) return false;
+    return true;
+  });
+}
+function renderScreen(v) {
+  if (!MY.length) {
+    v.innerHTML = `<div class="panel empty"><h2>No papers assigned to you yet</h2><p class="muted">${isLead() ? "Assign papers on the Team tab. Tick yourself if you are screening too." : "Your lead hasn't assigned you any papers yet. This page updates by itself when they do."}</p>${isLead() ? `<button class="primary" id="toTeam">Go to Team</button>` : ""}</div>`;
+    const t = $("#toTeam"); if (t) t.onclick = () => setTab("team"); return;
+  }
+  const counts = { include: 0, exclude: 0, maybe: 0 }; MY.forEach(r => { const d = DEC[r.id]; if (d) counts[d.d]++; });
+  const done = counts.include + counts.exclude + counts.maybe;
+  const list = screenList();
+  let cur = myById.get(ui.cur);
+  if (!cur) { cur = list[0] || MY.find(r => !DEC[r.id]) || MY[0]; ui.cur = cur.id; }
+  const d = DEC[cur.id];
+  const pct = n => (100 * n / MY.length).toFixed(2) + "%";
+  const fbtn = (k, label, n) => `<button data-f="${k}" aria-pressed="${ui.filter === k}">${label}${n != null ? ` <span class="mono">${n}</span>` : ""}</button>`;
+  const pos = list.findIndex(r => r.id === cur.id);
+  const reasons = P.reasons || DEFAULT_REASONS;
+  v.innerHTML = `
+  <div class="screen">
+    <aside class="listpane">
+      <div class="row spread"><span class="label">Your progress${P.blind !== false ? " · blind" : ""}</span><span class="mono muted">${done} / ${MY.length}</span></div>
+      <div class="progress" aria-hidden="true"><i style="width:${pct(counts.include)};background:var(--inc)"></i><i style="width:${pct(counts.maybe)};background:var(--may)"></i><i style="width:${pct(counts.exclude)};background:var(--exc)"></i></div>
+      <div class="filters">${fbtn("todo", "To do", MY.length - done)}${fbtn("include", "Included", counts.include)}${fbtn("maybe", "Maybe", counts.maybe)}${fbtn("exclude", "Excluded", counts.exclude)}${fbtn("all", "All")}</div>
+      <input type="search" id="search" placeholder="Search titles, abstracts, authors" value="${esc(ui.search)}" aria-label="Search your papers">
+      <div class="reclist" id="reclist">${list.slice(0, ui.listLimit).map(r => { const dd = DEC[r.id]; return `<button data-id="${r.id}" class="${r.id === cur.id ? "cur" : ""}"><span class="dot ${dd ? dd.d : ""}"></span><span><span class="t">${esc(r.title || "(no title)")}</span><span class="s">#${r.no} · ${esc([shortAuthors(r.authors), r.year].filter(Boolean).join(" · "))}</span></span></button>`; }).join("") || `<p class="muted" style="padding:12px">${ui.filter === "todo" && !ui.search ? "All done. Nice work." : "No papers match this filter."}</p>`}
+      ${list.length > ui.listLimit ? `<button id="more" style="justify-content:center">Show ${Math.min(200, list.length - ui.listLimit)} more</button>` : ""}</div>
+    </aside>
+    <article class="panel reader">
+      <div class="navrow"><span class="label">Paper #${cur.no}${pos >= 0 ? ` · ${pos + 1} of ${list.length} in this list` : ""}</span>
+        <div class="row"><button id="prev" title="Previous (K or ←)">← Prev</button><button id="next" title="Next (J or →)">Next →</button></div></div>
+      <h1 class="rtitle">${highlight(cur.title || "(no title)")}</h1>
+      <div class="meta">${cur.authors ? `<span>${esc(cur.authors.length > 220 ? cur.authors.slice(0, 220) + "…" : cur.authors)}</span>` : ""}${cur.year ? `<span class="mono">${esc(cur.year)}</span>` : ""}${cur.journal ? `<span>${esc(cur.journal)}</span>` : ""}
+        ${cur.doi ? `<a href="https://doi.org/${encodeURI(cur.doi)}" target="_blank" rel="noopener">doi:${esc(cur.doi)}</a>` : ""}${cur.pmid ? `<a href="https://pubmed.ncbi.nlm.nih.gov/${esc(cur.pmid)}/" target="_blank" rel="noopener">PMID ${esc(cur.pmid)}</a>` : ""}</div>
+      <div class="abstract ${cur.abstract ? "" : "none"}">${cur.abstract ? highlight(cur.abstract) : "No abstract in the imported file."}</div>
+      ${cur.keywords ? `<p class="muted small"><span class="label">Keywords</span> ${highlight(cur.keywords)}</p>` : ""}
+      <div class="decide">
+        <button class="inc ${d && d.d === "include" ? "on" : ""}" data-d="include">Include <kbd>I</kbd></button>
+        <button class="may ${d && d.d === "maybe" ? "on" : ""}" data-d="maybe">Maybe <kbd>M</kbd></button>
+        <button class="exc ${d && d.d === "exclude" ? "on" : ""}" data-d="exclude">Exclude <kbd>E</kbd></button>
+      </div>
+      ${d && d.d === "exclude" ? `<div><span class="label">Reason for exclusion (optional)</span><div class="chips" style="margin-top:6px">${reasons.map(r => `<button data-reason="${esc(r)}" aria-pressed="${d.reason === r}">${esc(r)}</button>`).join("")}</div></div>` : ""}
+      ${d ? `<label><span class="label">Note</span><textarea id="note" rows="2" placeholder="Optional note for this paper">${esc(d.note || "")}</textarea></label>
+        <div class="row"><button id="clear">Clear my decision <kbd>U</kbd></button><span class="muted small">Decided ${new Date(d.at).toLocaleString()}</span></div>` : ""}
+      <p class="muted small"><kbd>I</kbd> include · <kbd>E</kbd> exclude · <kbd>M</kbd> maybe · <kbd>U</kbd> clear · <kbd>J</kbd>/<kbd>→</kbd> next · <kbd>K</kbd>/<kbd>←</kbd> previous. Saved automatically.</p>
+    </article>
+  </div>`;
+  v.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { ui.filter = b.dataset.f; ui.listLimit = 200; render(); });
+  const s = $("#search"); s.oninput = () => { ui.search = s.value; ui.listLimit = 200; render(); const n = $("#search"); n.focus(); n.setSelectionRange(n.value.length, n.value.length); };
+  $("#reclist").onclick = ev => { const b = ev.target.closest("button[data-id]"); if (b) { ui.cur = b.dataset.id; render(); } };
+  const more = $("#more"); if (more) more.onclick = ev => { ev.stopPropagation(); ui.listLimit += 200; render(); };
+  $("#prev").onclick = () => step(-1); $("#next").onclick = () => step(1);
+  v.querySelectorAll("[data-d]").forEach(b => b.onclick = () => choose(b.dataset.d));
+  v.querySelectorAll("[data-reason]").forEach(b => b.onclick = () => { const dd = Object.assign({}, DEC[cur.id]); dd.reason = dd.reason === b.dataset.reason ? "" : b.dataset.reason; setDecision(cur.id, dd); render(); });
+  const note = $("#note"); if (note) note.onchange = () => setDecision(cur.id, Object.assign({}, DEC[cur.id], { note: note.value }));
+  const clr = $("#clear"); if (clr) clr.onclick = () => { setDecision(cur.id, null); render(); };
+  const curBtn = $("#reclist .cur"); if (curBtn) curBtn.scrollIntoView({ block: "nearest" });
+}
+let excludeNext = null; // after Exclude we stay so a reason can be picked; Next or the next decision moves on
+function step(dir) {
+  if (excludeNext && dir > 0 && ui.filter !== "all") { ui.cur = excludeNext; excludeNext = null; render(); return; }
+  excludeNext = null;
+  const list = screenList(); if (!list.length) return;
+  let i = list.findIndex(r => r.id === ui.cur); i = i < 0 ? 0 : Math.min(list.length - 1, Math.max(0, i + dir));
+  ui.cur = list[i].id; render();
+}
+function choose(dec) {
+  const id = ui.cur; const prev = DEC[id]; if (!myById.has(id)) return;
+  if (prev && prev.d === dec) return;
+  const i = MY.findIndex(r => r.id === id); let next = null;
+  for (let k = 1; k <= MY.length; k++) { const r = MY[(i + k) % MY.length]; if (!DEC[r.id] && r.id !== id) { next = r.id; break; } }
+  setDecision(id, { d: dec, reason: "", note: (prev && prev.note) || "", at: new Date().toISOString() });
+  excludeNext = null;
+  if (dec === "exclude") excludeNext = next; else if (next && ui.filter !== "all") ui.cur = next;
   render();
-})();
+}
+document.addEventListener("keydown", ev => {
+  if (!P || ui.tab !== "screen" || !MY.length || ev.metaKey || ev.ctrlKey || ev.altKey) return;
+  const t = ev.target; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+  const k = ev.key.toLowerCase();
+  if (k === "i") choose("include"); else if (k === "e") choose("exclude"); else if (k === "m") choose("maybe");
+  else if (k === "u") { setDecision(ui.cur, null); render(); }
+  else if (k === "j" || ev.key === "ArrowRight") step(1);
+  else if (k === "k" || ev.key === "ArrowLeft") step(-1);
+  else return;
+  ev.preventDefault();
+});
+
+/* Compare (lead) */
+function renderCompare(v) {
+  const memberByEmail = {}; Object.values(P.members || {}).forEach(m => memberByEmail[m.email] = m);
+  const progress = `<div class="tablewrap"><table><thead><tr><th>Reviewer</th><th>Progress</th></tr></thead><tbody>
+    ${Object.entries(P.assignCounts || {}).map(([e, n]) => { const m = memberByEmail[e]; const done = m && m.total ? m.done || 0 : 0; return `<tr><td>${esc(m ? m.name : e)}</td><td><div class="row"><span class="bar" style="width:120px"><i style="width:${(100 * done / n).toFixed(1)}%"></i></span><span class="mono small">${done}/${n}</span></div></td></tr>`; }).join("") || `<tr><td colspan="2" class="muted">No papers assigned yet.</td></tr>`}
+  </tbody></table></div>`;
+  if (P.blind !== false) {
+    v.innerHTML = `<div class="panel"><div><h2>Compare reviewers</h2><p class="muted">Blind mode is on: nobody, including you, can see anyone else's decisions. Turn it off once everyone has finished to see agreement and conflicts.</p></div>
+      ${progress}<div id="revealArea"><button class="primary" id="revealBtn">Turn blind mode off and compare</button></div></div>`;
+    $("#revealBtn").onclick = () => {
+      $("#revealArea").innerHTML = `<div class="confirm"><p>Reveal decisions? You will see every reviewer's decisions. Reviewers still only see their own. You can turn blind mode back on.</p><div class="row"><button class="primary" id="revYes">Reveal</button><button id="revNo">Cancel</button></div></div>`;
+      $("#revYes").onclick = () => saveProject({ blind: false }); $("#revNo").onclick = render;
+    };
+    return;
+  }
+  const c = compareData();
+  if (!c) { v.innerHTML = `<div class="panel empty"><h3>Nothing to compare yet</h3><p class="muted">Assign papers on the Team tab first.</p></div>`; return; }
+  const finInc = c.rows.filter(x => x.fin === "include").length, finExc = c.rows.filter(x => x.fin === "exclude").length;
+  const f = ui.cmpFilter;
+  const shown = c.rows.filter(x => f === "open" ? c.open.includes(x) : f === "resolved" ? FINAL[x.r.id] : f === "agree" ? x.status === "agree" : f === "pending" ? x.status === "pending" : true);
+  const pos = A ? new Map(A.order.map((id, i) => [id, i + 1])) : new Map();
+  v.innerHTML = `
+  <div class="panel">
+    <div class="row spread"><div><h2>Compare reviewers</h2><p class="muted">Blind mode is off. You see everyone's decisions; reviewers see only their own.</p></div><button id="blindBtn">Turn blind mode back on</button></div>
+    <div class="stats">
+      <div class="stat"><div class="label">Screened by all their reviewers</div><div class="n">${c.full}/${c.rows.length}</div></div>
+      <div class="stat"><div class="label">Agreement</div><div class="n">${c.full ? (c.agree * 100).toFixed(1) + "%" : "–"}</div></div>
+      <div class="stat"><div class="label">Need your decision</div><div class="n" style="color:var(--may)">${c.open.length}</div></div>
+      <div class="stat"><div class="label">Final include / exclude</div><div class="n"><span style="color:var(--inc)">${finInc}</span> / <span style="color:var(--exc)">${finExc}</span></div></div>
+    </div>
+    ${c.pairs.length ? `<div class="tablewrap"><table><thead><tr><th>Reviewer pair</th><th>Papers both screened</th><th>Agreement</th><th>Cohen's κ (3 categories)</th><th>κ include/exclude</th></tr></thead><tbody>
+      ${c.pairs.map(p => `<tr><td>${p.key.split("|").map(e => esc(nameOf(e))).join(" + ")}</td><td class="mono">${p.n}</td><td class="mono">${(p.po * 100).toFixed(1)}%</td><td class="mono">${p.k3 == null ? "–" : p.k3.toFixed(2)} <span class="muted">${kappaWord(p.k3)}</span></td><td class="mono">${p.k2 == null ? "–" : p.k2.toFixed(2)} <span class="muted">${kappaWord(p.k2)}</span></td></tr>`).join("")}
+    </tbody></table></div><p class="muted small">For κ include/exclude, Maybe counts as Include (the usual convention at title/abstract stage).</p>` : ""}
+    <details><summary class="muted" style="cursor:pointer">Reviewer progress</summary><div style="margin-top:8px">${progress}</div></details>
+  </div>
+  <div class="panel">
+    <div class="filters">${[["open", "Need a decision", c.open.length], ["resolved", "Decided by you", c.rows.filter(x => FINAL[x.r.id]).length], ["agree", "Agreed", c.rows.filter(x => x.status === "agree").length], ["pending", "Not finished", c.rows.filter(x => x.status === "pending").length], ["all", "All", c.rows.length]].map(([k, l, n]) => `<button data-cf="${k}" aria-pressed="${f === k}">${l} <span class="mono">${n}</span></button>`).join("")}</div>
+    <div>${shown.slice(0, 150).map(x => `<div class="conf">
+      <div class="ct">#${pos.get(x.r.id) || "?"} · ${esc(x.r.title || "(no title)")}</div>
+      <div class="meta">${esc([shortAuthors(x.r.authors), x.r.year, x.r.journal].filter(Boolean).join(" · "))}</div>
+      <div class="votes">${x.votes.map(o => `<span>${esc(nameOf(o.e))}: ${pill(o.v)}${o.v && o.v.reason ? ` <span class="muted">${esc(o.v.reason)}</span>` : ""}${o.v && o.v.note ? ` <span class="muted">“${esc(o.v.note)}”</span>` : ""}</span>`).join("")}</div>
+      ${x.r.abstract ? `<details><summary>Abstract</summary><p class="abstract" style="font-size:15px;margin-top:6px">${highlight(x.r.abstract)}</p></details>` : ""}
+      <div class="row"><span class="label">Final</span>
+        <button class="finbtn ${x.fin === "include" ? "on-include" : ""}" data-fin="include" data-id="${x.r.id}">Include</button>
+        <button class="finbtn ${x.fin === "exclude" ? "on-exclude" : ""}" data-fin="exclude" data-id="${x.r.id}">Exclude</button>
+        ${FINAL[x.r.id] ? `<button data-fin="" data-id="${x.r.id}">Reset</button>` : ""}
+        ${x.fin ? `<span class="muted small">${FINAL[x.r.id] ? "your decision" : "reviewers agreed"}</span>` : ""}</div>
+    </div>`).join("") || `<p class="muted">Nothing in this list.</p>`}
+    ${shown.length > 150 ? `<p class="muted">Showing 150 of ${shown.length}. Decide some to see more.</p>` : ""}</div>
+  </div>`;
+  $("#blindBtn").onclick = () => saveProject({ blind: true });
+  v.querySelectorAll("[data-cf]").forEach(b => b.onclick = () => { ui.cmpFilter = b.dataset.cf; render(); });
+  v.querySelectorAll("[data-fin]").forEach(b => b.onclick = () => { saveFinal(b.dataset.id, b.dataset.fin); render(); });
+}
+
+/* Export */
+function renderExport(v) {
+  const base = slug(P.name);
+  const myCSV = () => {
+    const reasons = [["paper #", "title", "authors", "year", "journal", "doi", "pmid", "my decision", "reason", "note", "decided at"]];
+    for (const r of MY) { const d = DEC[r.id]; reasons.push([r.no, r.title, r.authors, r.year, r.journal, r.doi, r.pmid, d ? d.d : "", d ? d.reason : "", d ? d.note : "", d ? d.at : ""]); }
+    return toCSV(reasons);
+  };
+  if (!isLead()) {
+    v.innerHTML = `<div class="panel"><h3>My decisions</h3><p class="muted">Your ${plural(MY.length, "assigned paper")} with your decisions, reasons and notes, as a CSV for Excel or Google Sheets. Your decisions are already saved online; this is only a copy.</p>
+      <div><button class="primary" id="exMine" ${MY.length ? "" : "disabled"}>Download my decisions</button></div></div>`;
+    $("#exMine").onclick = () => saveFile(base + "-my-decisions.csv", myCSV()); return;
+  }
+  const act = activeRecords(); const c = P.blind === false ? compareData() : null;
+  const finInc = c ? c.rows.filter(x => x.fin === "include").length : 0, finExc = c ? c.rows.filter(x => x.fin === "exclude").length : 0;
+  v.innerHTML = `
+  <div class="grid2">
+    <div class="panel"><h3>Screening results (CSV)</h3>
+      <p class="muted">Every paper with who screened it, each decision, reason and note, the agreement status and the final decision.</p>
+      ${c ? "" : `<p class="note small">Turn blind mode off on the Compare tab to include everyone's decisions.</p>`}
+      <div class="row"><button class="primary" id="exResults" ${act.length ? "" : "disabled"}>Download all results</button><button id="exIncluded" ${finInc ? "" : "disabled"}>Final includes only</button><button id="exDups" ${Object.keys(D.removed).length ? "" : "disabled"}>Removed duplicates</button><button id="exMine" ${MY.length ? "" : "disabled"}>My decisions</button></div></div>
+    <div class="panel"><h3>PRISMA numbers</h3>
+      <div class="tablewrap"><table><tbody>
+        <tr><td>Records identified</td><td class="mono">${R.length}</td></tr>
+        ${(P.sources || []).map(s => `<tr><td class="muted">&nbsp;&nbsp;${esc(s.name)}</td><td class="mono muted">${s.count}</td></tr>`).join("")}
+        <tr><td>Duplicates removed</td><td class="mono">${Object.keys(D.removed).length}</td></tr>
+        <tr><td>Records screened (title/abstract)</td><td class="mono">${act.length}</td></tr>
+        <tr><td>Records excluded</td><td class="mono">${c ? finExc : "–"}</td></tr>
+        <tr><td>Records sought for full-text retrieval</td><td class="mono">${c ? finInc : "–"}</td></tr>
+        ${c ? `<tr><td>Still undecided</td><td class="mono" style="color:var(--may)">${act.length - finInc - finExc}</td></tr>` : ""}
+      </tbody></table></div></div>
+  </div>`;
+  const results = only => {
+    const pos = A ? new Map(A.order.map((id, i) => [id, i + 1])) : new Map();
+    const rowsById = new Map(c ? c.rows.map(x => [x.r.id, x]) : []);
+    const people = [...new Set(Object.values(A ? A.map : {}).flat())];
+    const byEmail = {}; Object.values(OTHERS).forEach(o => byEmail[o.email] = o.d); byEmail[me.email] = DEC;
+    const header = ["paper #", "id", "title", "authors", "year", "journal", "doi", "pmid", "abstract", "source", "screened by"];
+    people.forEach(e => header.push(nameOf(e) + " decision", nameOf(e) + " reason", nameOf(e) + " note"));
+    header.push("agreement", "final decision");
+    const rows = [header];
+    for (const r of act) {
+      const x = rowsById.get(r.id); const fin = x ? x.fin || "" : ""; if (only && fin !== "include") continue;
+      const es = A && A.map[r.id] || [];
+      const row = [pos.get(r.id) || "", r.id, r.title, r.authors, r.year, r.journal, r.doi, r.pmid, r.abstract, r.source, es.map(nameOf).join("; ")];
+      people.forEach(e => { const d = es.includes(e) && c ? (byEmail[e] || {})[r.id] : null; row.push(d ? d.d : "", d ? d.reason : "", d ? d.note : ""); });
+      row.push(x ? ({ bothmaybe: "all maybe", pending: "not finished" })[x.status] || x.status : "not assigned", fin);
+      rows.push(row);
+    }
+    return toCSV(rows);
+  };
+  $("#exResults").onclick = () => saveFile(base + "-screening-results.csv", results(false));
+  $("#exIncluded").onclick = () => saveFile(base + "-included.csv", results(true));
+  $("#exMine").onclick = () => saveFile(base + "-my-decisions.csv", myCSV());
+  $("#exDups").onclick = () => { const rows = [["removed id", "title", "authors", "year", "doi", "source", "kept id", "kept title"]]; for (const [id, keep] of Object.entries(D.removed)) { const r = byId.get(id), k = byId.get(keep); if (r) rows.push([id, r.title, r.authors, r.year, r.doi, r.source, keep, k ? k.title : ""]); } saveFile(base + "-duplicates-removed.csv", toCSV(rows)); };
+}
+
+window.addEventListener("hashchange", () => { const id = (location.hash.match(/^#p-([\w-]+)$/) || [])[1]; if (me && id && id !== PID) openProject(id); });
 render();
+boot();
 </script>
 </body>
 </html>

@@ -1,0 +1,55 @@
+rules_version = '2';
+
+// Twofold access rules.
+// - A review is visible only to the Google accounts whose email the lead added.
+// - Only the lead sees all records, duplicates, the assignment plan and final decisions.
+// - Each reviewer reads only the papers assigned to them and only their own decisions.
+// - The lead can read everyone's decisions only after turning blind mode off.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null && request.auth.token.email_verified == true; }
+    function myEmail() { return request.auth.token.email.lower(); }
+    function proj(pid) { return get(/databases/$(database)/documents/projects/$(pid)).data; }
+    function isMember(pid) { return signedIn() && myEmail() in proj(pid).emails; }
+    function isOwner(pid) { return signedIn() && proj(pid).owner == request.auth.uid; }
+    function revealed(pid) { return proj(pid).blind == false; }
+
+    match /projects/{pid} {
+      allow read: if signedIn() && myEmail() in resource.data.emails;
+      allow create: if signedIn()
+        && request.resource.data.owner == request.auth.uid
+        && myEmail() in request.resource.data.emails
+        && request.resource.data.blind == true;
+      // The lead edits everything (but cannot hand the review away or remove themselves);
+      // a reviewer may only update their own entry in `members` (name and progress).
+      allow update: if signedIn() && (
+        (resource.data.owner == request.auth.uid
+          && request.resource.data.owner == resource.data.owner
+          && myEmail() in request.resource.data.emails)
+        || (myEmail() in resource.data.emails
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['members'])
+          && request.resource.data.members.diff(resource.data.members).affectedKeys().hasOnly([request.auth.uid])));
+      allow delete: if signedIn() && resource.data.owner == request.auth.uid;
+
+      match /chunks/{chunk} {
+        allow read, write: if isOwner(pid);
+      }
+      match /meta/{doc} {
+        allow read, write: if isOwner(pid);
+      }
+      match /assign/{email} {
+        allow read: if isOwner(pid) || (isMember(pid) && email == myEmail());
+        allow write: if isOwner(pid);
+        match /parts/{part} {
+          allow read: if isOwner(pid) || (isMember(pid) && email == myEmail());
+          allow write: if isOwner(pid);
+        }
+      }
+      match /decisions/{uid} {
+        allow read: if isMember(pid) && (request.auth.uid == uid || (isOwner(pid) && revealed(pid)));
+        allow create, update: if isMember(pid) && request.auth.uid == uid;
+        allow delete: if isMember(pid) && (request.auth.uid == uid || isOwner(pid));
+      }
+    }
+  }
+}
