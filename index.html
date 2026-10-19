@@ -114,6 +114,7 @@ td.clip { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-spa
 .pill.exclude { background: var(--exc-soft); color: var(--exc); }
 .pill.maybe { background: var(--may-soft); color: var(--may); }
 .pill.lead { background: var(--accent); color: var(--accent-ink); }
+.pill.done { background: var(--sunk); color: var(--fg); box-shadow: inset 0 0 0 1px var(--accent); }
 .bar { height: 6px; background: var(--sunk); border-radius: 3px; overflow: hidden; display: flex; min-width: 80px; }
 .bar i { display: block; height: 100%; background: var(--accent); }
 
@@ -360,10 +361,11 @@ let D = { dupPairs: [], removed: {}, notDup: {}, dupHistory: [] }; // lead only:
 let A = null;                                                  // lead only: assignment plan {order, map, k}
 let FINAL = {};                                                // lead only: consensus decisions
 let OTHERS = {};                                               // lead only, when revealed: uid -> {name, email, d}
+let PROG = {};                                                 // lead only: email -> Set of paper ids that reviewer has screened (no decisions)
 let MY = [], myById = new Map(), myAssignV = null;             // my assigned papers
 let DEC = {};                                                  // my decisions
 let ui = { tab: "screen", filter: "todo", cur: null, cmpFilter: "open", search: "", listLimit: 200 };
-let pending = null, dupChoice = {}, busy = "";
+let pending = null, dupChoice = {}, busy = "", progSynced = false;
 
 const isLead = () => !!(P && me && P.owner === me.uid);
 function reindex() { byId = new Map(R.map(r => [r.id, r])); }
@@ -378,7 +380,9 @@ const ref = {
   assign: e => FB.doc(FB.D, "projects", PID, "assign", e),
   parts: e => FB.collection(FB.D, "projects", PID, "assign", e, "parts"),
   decisions: () => FB.collection(FB.D, "projects", PID, "decisions"),
-  dec: uid => FB.doc(FB.D, "projects", PID, "decisions", uid)
+  dec: uid => FB.doc(FB.D, "projects", PID, "decisions", uid),
+  progress: () => FB.collection(FB.D, "projects", PID, "progress"),
+  prog: uid => FB.doc(FB.D, "projects", PID, "progress", uid)
 };
 function fail(e) {
   console.error(e);
@@ -440,7 +444,7 @@ async function createProject(name) {
 function closeProject() {
   subs.forEach(u => u()); subs = []; if (revealSub) revealSub(); revealSub = null; ownerSubbed = false;
   PID = null; P = null; R = []; byId = new Map(); loadedChunkV = null; D = { dupPairs: [], removed: {}, notDup: {}, dupHistory: [] };
-  A = null; FINAL = {}; OTHERS = {}; MY = []; myById = new Map(); myAssignV = null; DEC = {}; pending = null; dupChoice = {}; teamOff = null;
+  A = null; FINAL = {}; OTHERS = {}; PROG = {}; progSynced = false; MY = []; myById = new Map(); myAssignV = null; DEC = {}; pending = null; dupChoice = {}; teamOff = null;
   ui = Object.assign(ui, { cur: null, search: "", listLimit: 200 });
 }
 function openProject(id) {
@@ -462,13 +466,18 @@ function openProject(id) {
     if (!a) { MY = []; myById = new Map(); myAssignV = null; renderSoon(); return; }
     if (a.v !== myAssignV) loadMyParts(a.v);
   }, () => {}));
-  subs.push(FB.onSnapshot(ref.dec(me.uid), snap => { DEC = (snap.exists() && snap.data().d) || {}; renderSoon(); }, () => {}));
+  subs.push(FB.onSnapshot(ref.dec(me.uid), snap => {
+    DEC = (snap.exists() && snap.data().d) || {};
+    if (!progSynced && !snap.metadata.fromCache) { progSynced = true; FB.setDoc(ref.prog(me.uid), { email: me.email, ids: Object.fromEntries(Object.keys(DEC).map(k => [k, true])) }).catch(() => {}); }
+    renderSoon();
+  }, () => {}));
 }
 function ownerSubscribe() {
   if (ownerSubbed) return; ownerSubbed = true;
   subs.push(FB.onSnapshot(ref.meta("dups"), s => { D = Object.assign({ dupPairs: [], removed: {}, notDup: {}, dupHistory: [] }, s.exists() ? s.data() : {}); renderSoon(); }, () => {}));
   subs.push(FB.onSnapshot(ref.meta("assignment"), s => { A = s.exists() ? s.data() : null; renderSoon(); }, () => {}));
   subs.push(FB.onSnapshot(ref.meta("final"), s => { FINAL = (s.exists() && s.data().f) || {}; renderSoon(); }, () => {}));
+  subs.push(FB.onSnapshot(ref.progress(), s => { const o = {}; s.docs.forEach(d => { const x = d.data(); if (x.email) o[x.email] = new Set(Object.keys(x.ids || {})); }); PROG = o; renderSoon(); }, () => {}));
 }
 function syncReveal() {
   const open = isLead() && P.blind === false;
@@ -503,7 +512,10 @@ async function loadMyParts(v) {
 /* ---------- writes ---------- */
 function setDecision(id, val) {
   if (val) DEC[id] = val; else delete DEC[id];
+  // the decision itself stays blind; the progress doc only says "screened" so the lead can follow along
+  // saved separately so a refused progress write can never block the decision
   FB.setDoc(ref.dec(me.uid), { name: me.name, email: me.email, d: { [id]: val || FB.deleteField() } }, { merge: true }).catch(fail);
+  FB.setDoc(ref.prog(me.uid), { email: me.email, ids: { [id]: val ? true : FB.deleteField() } }, { merge: true }).catch(() => {});
   updateProgress();
 }
 let progressTimer = null;
@@ -565,7 +577,7 @@ async function deleteProject() {
     await kill(ref.chunks());
     const emails = new Set([...(P.emails || []), ...Object.keys(P.assignCounts || {}), ...Object.keys((A && A.counts) || {})]);
     for (const e of emails) { await kill(ref.parts(e)); await FB.deleteDoc(ref.assign(e)); }
-    for (const uid of Object.keys(P.members || {})) await FB.deleteDoc(ref.dec(uid));
+    for (const uid of Object.keys(P.members || {})) { await FB.deleteDoc(ref.dec(uid)); await FB.deleteDoc(ref.prog(uid)); }
     for (const m of ["dups", "assignment", "final"]) await FB.deleteDoc(ref.meta(m));
     const id = PID; closeProject(); await FB.deleteDoc(ref.proj(id));
     lsSet("twofold-last", ""); history.replaceState(null, "", location.pathname);
@@ -821,6 +833,9 @@ function renderHome(main) {
 function renderImport(v) {
   const has = R.length > 0;
   v.innerHTML = `
+  ${has ? `<div class="panel" id="papers"></div>
+  <details class="panel" id="addMore" ${pending || ui.addOpen ? "open" : ""}><summary style="cursor:pointer"><b>Add more records</b> <span class="muted small">· rename the review</span></summary>
+  <div style="margin-top:12px">` : ""}
   <div class="grid2">
     <div class="panel">
       <div><h2>${has ? "Add more records" : "Import records"}</h2>
@@ -844,6 +859,7 @@ function renderImport(v) {
       <div class="row"><input type="text" id="projRename" value="${esc(P.name)}" style="flex:1"><button id="renameBtn">Rename</button></div>
     </div>
   </div>
+  ${has ? `</div></details>` : ""}
   ${has ? `<div class="panel"><h3>Sources</h3>
     <div class="tablewrap"><table><thead><tr><th>File</th><th>Records</th><th>Added</th></tr></thead><tbody>
     ${(P.sources || []).map(s => `<tr><td>${esc(s.name)}</td><td class="mono">${s.count}</td><td class="muted">${new Date(s.at).toLocaleString()}</td></tr>`).join("")}
@@ -863,6 +879,46 @@ function renderImport(v) {
     $("#delYes").onclick = deleteProject; $("#delNo").onclick = render;
   };
   if (pending) renderMapping();
+  if (has) { renderPapers(); $("#addMore").addEventListener("toggle", e => { ui.addOpen = e.target.open; }); }
+}
+function paperStatus(r) {
+  if (D.removed[r.id]) return "dup";
+  const es = (A && A.map[r.id]) || [];
+  if (!es.length) return "unassigned";
+  return es.every(e => PROG[e] && PROG[e].has(r.id)) ? "done" : "open";
+}
+function renderPapers() {
+  const box = $("#papers"); if (!box) return;
+  const revealed = P.blind === false;
+  const byEmail = {}; if (revealed) { Object.values(OTHERS).forEach(o => byEmail[o.email] = o.d); byEmail[me.email] = DEC; }
+  const pos = A ? new Map(A.order.map((id, i) => [id, i + 1])) : new Map();
+  const finOf = new Map(revealed && A ? (compareData() || { rows: [] }).rows.map(x => [x.r.id, x.fin]) : []);
+  const st = new Map(R.map(r => [r.id, paperStatus(r)]));
+  const count = k => R.filter(r => k === "all" ? st.get(r.id) !== "dup" : st.get(r.id) === k).length;
+  const f = ui.pf || "all", q = (ui.ps || "").trim().toLowerCase();
+  const list = R.filter(r => (f === "all" ? st.get(r.id) !== "dup" : st.get(r.id) === f) && (!q || (r.title + " " + r.abstract + " " + r.authors + " " + r.doi + " " + r.pmid).toLowerCase().includes(q)))
+    .sort((a, b) => (pos.get(a.id) || 1e9) - (pos.get(b.id) || 1e9));
+  const lim = ui.plimit || 50;
+  const chip = (e, id) => {
+    const done = PROG[e] && PROG[e].has(id); const d = revealed ? (byEmail[e] || {})[id] : null;
+    return d ? `<span class="pill ${d.d}">${esc(nameOf(e))}: ${d.d[0].toUpperCase() + d.d.slice(1)}</span>`
+      : `<span class="pill ${done ? "done" : ""}">${esc(nameOf(e))}: ${done ? "screened" : "not yet"}</span>`;
+  };
+  box.innerHTML = `
+    <div class="row spread"><div><h2>All papers</h2><p class="muted small">${revealed ? "Blind mode is off: you see each reviewer's decision." : "Blind mode is on: you see who has screened each paper, not their decisions."}</p></div></div>
+    <div class="filters">${[["all", "To screen"], ["open", "Not finished"], ["done", "Screened by all"], ["unassigned", "Not assigned"], ["dup", "Removed duplicates"]].map(([k, l]) => `<button data-pf="${k}" aria-pressed="${f === k}">${l} <span class="mono">${count(k)}</span></button>`).join("")}</div>
+    <input type="search" id="psearch" placeholder="Search title, abstract, authors, DOI or PMID" value="${esc(ui.ps || "")}" aria-label="Search all papers">
+    <div>${list.slice(0, lim).map(r => { const s = st.get(r.id); const es = (A && A.map[r.id]) || []; const fin = FINAL[r.id] || finOf.get(r.id); return `<div class="conf">
+      <div class="row spread"><span class="label">${pos.get(r.id) ? "#" + pos.get(r.id) + " · " : ""}${esc(r.source || "")}</span>
+        <span class="row">${s === "dup" ? `<span class="pill">Duplicate${byId.get(D.removed[r.id]) && pos.get(D.removed[r.id]) ? " of #" + pos.get(D.removed[r.id]) : ""}</span>` : s === "unassigned" ? `<span class="pill maybe">Not assigned</span>` : es.map(e => chip(e, r.id)).join("")}${fin ? `<span class="pill ${fin}">Final: ${fin[0].toUpperCase() + fin.slice(1)}</span>` : ""}</span></div>
+      <div class="ct">${highlight(r.title || "(no title)")}</div>
+      <div class="meta">${esc([shortAuthors(r.authors), r.year, r.journal].filter(Boolean).join(" · "))}${r.doi ? ` <a href="https://doi.org/${encodeURI(r.doi)}" target="_blank" rel="noopener">doi:${esc(r.doi)}</a>` : ""}${r.pmid ? ` <a href="https://pubmed.ncbi.nlm.nih.gov/${esc(r.pmid)}/" target="_blank" rel="noopener">PMID ${esc(r.pmid)}</a>` : ""}</div>
+      ${r.abstract ? `<details><summary>Abstract</summary><p class="abstract" style="font-size:15px;margin-top:6px">${highlight(r.abstract)}</p></details>` : `<p class="muted small">No abstract in the imported file.</p>`}
+    </div>`; }).join("") || `<p class="muted">No papers match.</p>`}
+    ${list.length > lim ? `<button id="pmore" style="justify-content:center;width:100%">Show ${Math.min(50, list.length - lim)} more of ${list.length - lim}</button>` : ""}</div>`;
+  box.querySelectorAll("[data-pf]").forEach(b => b.onclick = () => { ui.pf = b.dataset.pf; ui.plimit = 50; renderPapers(); });
+  const s = $("#psearch"); s.oninput = () => { ui.ps = s.value; ui.plimit = 50; renderPapers(); const n = $("#psearch"); n.focus(); n.setSelectionRange(n.value.length, n.value.length); };
+  const m = $("#pmore"); if (m) m.onclick = () => { ui.plimit = lim + 50; renderPapers(); };
 }
 async function handleCSVFiles(files) {
   files = files.filter(Boolean); if (!files.length) return;
@@ -991,7 +1047,7 @@ function renderTeam(v) {
     <div class="row"><span class="label">Who screens</span>${emails.map(e => `<label class="check"><input type="checkbox" data-sel="${esc(e)}" ${teamSel.includes(e) ? "checked" : ""}>${esc(nameOf(e))}</label>`).join("")}</div>
     <div class="row"><label class="row"><span class="label">Reviewers per paper</span><select id="kSel">${[1, 2, 3, 4].filter(n => n <= maxK).map(n => `<option ${n === k ? "selected" : ""}>${n}</option>`).join("")}</select></label>
       <label class="check"><input type="checkbox" id="shufChk" ${teamShuffle ? "checked" : ""}>Shuffle papers before splitting</label></div>
-    <p class="muted small">${k > 1 && teamSel.length % k === 0 ? `${teamSel.length} reviewers make ${teamSel.length / k} fixed groups of ${k}; each group gets an equal share of the papers.` : k > 1 ? `${teamSel.length} reviewers don't split into equal groups of ${k}, so pairings rotate to keep the workload even.` : teamSel.length ? "Each paper is screened by one person." : "Tick who screens."}</p>
+    <p class="muted small">${k > 1 && teamSel.length % k === 0 ? `${teamSel.length} reviewers make ${teamSel.length / k} fixed group${teamSel.length / k === 1 ? "" : "s"} of ${k}; each group gets an equal share of the papers.` : k > 1 ? `${teamSel.length} reviewers don't split into equal groups of ${k}, so pairings rotate to keep the workload even.` : teamSel.length ? "Each paper is screened by one person." : "Tick who screens."}</p>
     <div class="row">
       ${hasPlan ? `<button class="primary" id="assignNew" ${st.unassigned || st.stale ? "" : "disabled"}>Assign the ${st.unassigned + st.stale} remaining papers</button><button id="redoBtn">Redo all assignments</button>`
         : `<button class="primary" id="assignAll" ${teamSel.length ? "" : "disabled"}>Assign ${plural(st.total, "paper")}</button>`}

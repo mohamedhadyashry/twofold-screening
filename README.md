@@ -53,7 +53,8 @@ server by `firestore.rules`:
 - only people the lead added can open a review;
 - only the lead sees the full record set, the duplicate decisions, the assignment plan and the final decisions;
 - a reviewer can read only the papers assigned to them and only their own decisions;
-- the lead can read reviewers' decisions only after turning blind mode off.
+- the lead can read reviewers' decisions only after turning blind mode off; while blind, the lead sees only which
+  papers each reviewer has screened (on the Records tab).
 
 The free plan allows 50,000 reads and 20,000 writes a day, enough for a team of 10 screening thousands of papers.
 

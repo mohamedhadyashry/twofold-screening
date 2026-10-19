@@ -6,7 +6,8 @@ rules_version = '2';
 // - A review is visible only to the Google accounts whose email the lead added.
 // - Only the lead sees all records, duplicates, the assignment plan and final decisions.
 // - Each reviewer reads only the papers assigned to them and only their own decisions.
-// - The lead can read everyone's decisions only after turning blind mode off.
+// - The lead can read everyone's decisions only after turning blind mode off;
+//   while blind, the lead only sees which papers each reviewer has screened.
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null && request.auth.token.email_verified == true; }
@@ -52,6 +53,12 @@ service cloud.firestore {
           allow read: if isOwner(pid) || (isMember(pid) && email == myEmail());
           allow write: if isOwner(pid);
         }
+      }
+      // Which papers each reviewer has screened, without the decisions, so the lead can follow progress while blind.
+      match /progress/{uid} {
+        allow read: if isOwner(pid) || (isMember(pid) && request.auth.uid == uid);
+        allow write: if isMember(pid) && request.auth.uid == uid;
+        allow delete: if isOwner(pid);
       }
       match /decisions/{uid} {
         allow read: if isMember(pid) && (request.auth.uid == uid || (isOwner(pid) && revealed(pid)));
