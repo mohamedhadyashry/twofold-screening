@@ -10,7 +10,8 @@ splits the papers between reviewers, and resolves conflicts.
 
 - **Google sign-in** for everyone. Only the site admin (the first person to sign in and claim the site)
   can start reviews; a review is visible only to the emails its lead adds.
-- **CSV import** from PubMed, Scopus, Web of Science, Embase, Rayyan, Zotero or EndNote, with column mapping.
+- **Import** PubMed files (PubMed format `.txt`/`.nbib`, or CSV), RIS files (Cochrane, Embase, Ovid, Web of Science,
+  Zotero, EndNote, Mendeley) and CSV files (Scopus, ClinicalTrials.gov, Rayyan…), with column mapping for CSV.
   Several files are merged.
 - **Duplicates**: same DOI, same PMID, identical title or a similar title (spelling variants, small typos).
   The lead keeps one record of each group or marks them as different papers. Every decision can be undone.

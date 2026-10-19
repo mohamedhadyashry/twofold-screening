@@ -66,7 +66,7 @@ section.view { display: grid; gap: 18px; }
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
 .row { display: flex; gap: 8px 10px; flex-wrap: wrap; align-items: center; }
 .spread { justify-content: space-between; }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-items: start; }
 
 button, .btn { font: 500 14px var(--sans); border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 6px; padding: 7px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 button:hover, .btn:hover { border-color: var(--muted); }
@@ -256,18 +256,71 @@ function parseCSV(text) {
   if (f !== "" || row.length) { row.push(f); rows.push(row); }
   return rows.filter(r => r.some(x => x.trim() !== ""));
 }
+/* RIS (Cochrane, Embase, Ovid, Web of Science, Zotero, EndNote) and PubMed/MEDLINE .txt/.nbib files
+   become the same table a CSV gives, with columns named after the fields so they map by themselves. */
+const TAG_HEADER = ["title", "abstract", "authors", "year", "journal", "doi", "pmid", "keywords", "url"];
+function tagsToRows(records, pick) {
+  return [TAG_HEADER].concat(records.map(pick).filter(r => r.title || r.abstract).map(r => TAG_HEADER.map(k => r[k] || "")));
+}
+function first(rec, ...tags) { for (const t of tags) if (rec[t] && rec[t].length) return rec[t][0]; return ""; }
+function all(rec, ...tags) { for (const t of tags) if (rec[t] && rec[t].length) return rec[t]; return []; }
+function parseRIS(text) {
+  const recs = []; let cur = null, last = null;
+  for (const line of text.split(/\r?\n/)) {
+    const m = line.match(/^([A-Z][A-Z0-9])\s{1,2}-(?: (.*))?$/);
+    if (m) {
+      const [, tag, val = ""] = m;
+      if (tag === "TY") { cur = {}; recs.push(cur); }
+      if (!cur) continue;
+      if (tag === "ER") { cur = null; last = null; continue; }
+      (cur[tag] = cur[tag] || []).push(val.trim()); last = tag;
+    } else if (cur && last && line.trim()) { const a = cur[last]; a[a.length - 1] += " " + line.trim(); }
+  }
+  return tagsToRows(recs, r => {
+    const an = first(r, "AN"), pm = an.match(/^(?:PUBMED\s*)?(\d{5,9})$/i);
+    const doi = first(r, "DO") || (all(r, "UR", "L3").find(u => /doi\.org\//i.test(u)) || "");
+    return { title: first(r, "TI", "T1", "CT", "BT"), abstract: all(r, "AB", "N2").join(" "), authors: all(r, "AU", "A1", "A2").join("; "),
+      year: first(r, "PY", "Y1", "DA", "Y2"), journal: first(r, "T2", "JO", "JF", "JA", "J2", "T3"), doi, pmid: pm ? pm[1] : "",
+      keywords: all(r, "KW").join("; "), url: first(r, "UR", "L2") };
+  });
+}
+function parseMedline(text) {
+  const recs = []; let cur = null, last = null;
+  for (const line of text.split(/\r?\n/)) {
+    const m = line.match(/^([A-Z]{2,4})\s*- (.*)$/);
+    if (m) {
+      const [, tag, val] = m;
+      if (tag === "PMID" || !cur) { cur = {}; recs.push(cur); }
+      (cur[tag] = cur[tag] || []).push(val.trim()); last = tag;
+    } else if (cur && last && /^\s{2,}\S/.test(line)) { const a = cur[last]; a[a.length - 1] += " " + line.trim(); }
+  }
+  return tagsToRows(recs, r => {
+    const doi = [...all(r, "LID"), ...all(r, "AID")].map(x => x.match(/^(\S+)\s*\[doi\]/)).find(Boolean);
+    const pmid = first(r, "PMID");
+    return { title: first(r, "TI", "BTI"), abstract: all(r, "AB").join(" "), authors: all(r, "FAU", "AU").join("; "), year: first(r, "DP"),
+      journal: first(r, "JT", "TA"), doi: doi ? doi[1] : "", pmid, keywords: [...all(r, "OT"), ...all(r, "MH")].join("; "),
+      url: pmid ? "https://pubmed.ncbi.nlm.nih.gov/" + pmid + "/" : "" };
+  });
+}
+function parseRecordsFile(text) {
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const head = text.slice(0, 5000);
+  if (/^TY\s{1,2}- /m.test(head)) return { kind: "RIS", rows: parseRIS(text) };
+  if (/^PMID- /m.test(head)) return { kind: "PubMed", rows: parseMedline(text) };
+  return { kind: "CSV", rows: parseCSV(text) };
+}
 function csvCell(v) { v = String(v ?? ""); return /[",\n\r;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
 function toCSV(rows) { return "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\r\n"); }
 const FIELDS = {
   title: { label: "Title", names: ["title", "article title", "document title", "ti", "primary title", "paper title"] },
-  abstract: { label: "Abstract", names: ["abstract", "ab", "abstract note", "abstracts", "summary"] },
+  abstract: { label: "Abstract", names: ["abstract", "ab", "abstract note", "abstracts", "summary", "brief summary"] },
   authors: { label: "Authors", names: ["authors", "author", "au", "author full names", "author names", "creators", "author(s)"] },
-  year: { label: "Year", names: ["year", "publication year", "py", "pubyear", "pub year", "year published", "publication date", "date", "create date", "pubdate"] },
+  year: { label: "Year", names: ["year", "publication year", "py", "pubyear", "pub year", "year published", "publication date", "date", "create date", "pubdate", "start date", "first posted"] },
   journal: { label: "Journal", names: ["journal", "source title", "journal/book", "publication title", "so", "secondary title", "journal title", "source", "publication"] },
   doi: { label: "DOI", names: ["doi", "di", "doi link", "doi url"] },
   pmid: { label: "PMID", names: ["pmid", "pubmed id", "pubmed_id", "pubmedid"] },
-  keywords: { label: "Keywords", names: ["keywords", "author keywords", "mesh terms", "de", "kw", "index keywords"] },
-  url: { label: "URL", names: ["url", "link", "links"] }
+  keywords: { label: "Keywords", names: ["keywords", "author keywords", "mesh terms", "de", "kw", "index keywords", "conditions"] },
+  url: { label: "URL", names: ["url", "link", "links", "study url"] }
 };
 function autoMap(header) {
   const h = header.map(x => x.trim().toLowerCase().replace(/^"|"$/g, ""));
@@ -758,16 +811,16 @@ function renderImport(v) {
   <div class="grid2">
     <div class="panel">
       <div><h2>${has ? "Add more records" : "Import records"}</h2>
-      <p class="muted">Load CSV exports from PubMed, Scopus, Web of Science, Embase, Rayyan, Zotero or EndNote. Several files are merged and checked for duplicates. Only you, the lead, see the full set.</p></div>
-      <div class="dropzone" id="drop"><p>Drop CSV files here</p>
-        <label class="btn primary">Choose CSV files<input type="file" id="csvInput" accept=".csv,.tsv,.txt,text/csv" multiple></label></div>
+      <p class="muted">Load exports from PubMed (PubMed format .txt or CSV), Cochrane, Embase, Web of Science, Ovid, Zotero or EndNote (RIS), Scopus or ClinicalTrials.gov (CSV). Several files are merged and checked for duplicates. Only you, the lead, see the full set.</p></div>
+      <div class="dropzone" id="drop"><p>Drop CSV, RIS or PubMed .txt files here</p>
+        <label class="btn primary">Choose files<input type="file" id="csvInput" accept=".csv,.tsv,.txt,.ris,.nbib,text/csv" multiple></label></div>
       <div id="mapping"></div>
       ${has ? "" : `<button id="loadExample">Load an example set to try it</button>`}
     </div>
     <div class="panel">
       <h3>How a review runs</h3>
       <ol class="steps">
-        <li><b>Records:</b> import your CSV files.</li>
+        <li><b>Records:</b> import your exported files.</li>
         <li><b>Duplicates:</b> keep one record of each duplicate group.</li>
         <li><b>Team:</b> add your reviewers' Google emails and assign papers, for example two reviewers per paper.</li>
         <li><b>Screen:</b> everyone screens their own papers, blind.</li>
@@ -802,7 +855,11 @@ async function handleCSVFiles(files) {
   files = files.filter(Boolean); if (!files.length) return;
   const parsed = [];
   for (const f of files) {
-    try { const rows = parseCSV(await readFile(f)); if (rows.length < 2) { toast(f.name + " has no data rows."); continue; } parsed.push({ name: f.name, header: rows[0], rows: rows.slice(1) }); }
+    try {
+      const { kind, rows } = parseRecordsFile(await readFile(f));
+      if (rows.length < 2) { toast(kind === "CSV" ? f.name + " has no data rows." : `No records found in ${f.name}. Check it was exported with abstracts.`, 4500); continue; }
+      parsed.push({ name: f.name, kind, header: rows[0], rows: rows.slice(1) });
+    }
     catch (e) { toast("Could not read " + f.name); }
   }
   if (!parsed.length) return;
@@ -815,7 +872,7 @@ function renderMapping() {
     const m = pending.maps[fi];
     const opts = sel => `<option value="-1">(none)</option>` + f.header.map((h, i) => `<option value="${i}" ${i === sel ? "selected" : ""}>${esc(h || "Column " + (i + 1))}</option>`).join("");
     return `<div class="panel" style="padding:14px">
-      <div class="row spread"><h3>${esc(f.name)}</h3><span class="muted mono">${f.rows.length} rows</span></div>
+      <div class="row spread"><h3>${esc(f.name)}</h3><span class="muted mono">${f.kind !== "CSV" ? f.kind + " · " : ""}${plural(f.rows.length, "record")}</span></div>
       <p class="muted small">Check which column holds each field. Title and abstract matter most.</p>
       <div class="maprow">${Object.entries(FIELDS).map(([k, def]) => `<label><span class="label">${def.label}</span><select data-file="${fi}" data-field="${k}">${opts(m[k])}</select></label>`).join("")}</div>
       <div class="tablewrap"><table><thead><tr><th>Title</th><th>Abstract</th></tr></thead><tbody>
