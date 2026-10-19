@@ -1,4 +1,12 @@
-# Twofold — free team screening for systematic reviews
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <img src="assets/logo-light.svg" alt="Twofold" width="128" height="128">
+  </picture>
+</p>
+
+<h1 align="center">Twofold</h1>
+<p align="center">Free team screening of titles and abstracts for systematic reviews</p>
 
 A free alternative to Rayyan for title/abstract screening with a team.
 Everyone signs in with Google; the lead imports the records, removes duplicates,
@@ -57,6 +65,12 @@ The free plan allows 50,000 reads and 20,000 writes a day, enough for a team of 
 3. Firestore Database → **Rules** → replace everything with the contents of `firestore.rules` → **Publish**.
    Do this again whenever `firestore.rules` changes.
 4. Project settings → Your apps → web app → copy the config into `firebase-config.js`.
+
+## Logo files
+
+`assets/` holds the logo: `logo-light.svg` and `logo-dark.svg` (app icon), `mark.svg` (no background, for use next to
+the name), `favicon.svg` (simplified for small sizes, follows the browser's light/dark setting), PNG app icons, and
+`social-preview.png` (1280×640, for the repository's social preview).
 
 ## Files
 

@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Twofold Screening</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Free team screening of titles and abstracts for systematic reviews: blind dual review, duplicates, kappa and PRISMA.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#19212a" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Twofold Screening">
+<meta property="og:description" content="Free team screening of titles and abstracts for systematic reviews.">
+<meta property="og:image" content="https://mohamedhadyashry.github.io/twofold-screening/assets/social-preview.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 <style>
@@ -50,7 +60,9 @@ p { margin: 0; }
 header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
 .top .wrap { display: flex; align-items: center; gap: 10px 20px; flex-wrap: wrap; padding-block: 10px; }
 .brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
-.brand b { font: 600 17px/1 var(--serif); letter-spacing: .01em; }
+.brand { align-items: center; }
+.brand b { font: 600 17px/1 var(--serif); letter-spacing: .01em; display: inline-flex; align-items: center; gap: 8px; }
+.brand b img { width: 22px; height: 26px; display: block; }
 .brand .proj { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
 nav.tabs { display: flex; gap: 2px; flex-wrap: wrap; }
 nav.tabs button { border: 0; background: none; color: var(--muted); font: 500 14px var(--sans); padding: 7px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
@@ -195,7 +207,7 @@ mark.e { background: var(--hl-exc); color: inherit; border-radius: 2px; padding:
 <body>
 <header class="top">
   <div class="wrap">
-    <div class="brand"><b>Twofold</b><span class="proj" id="projName"></span></div>
+    <div class="brand"><b><img src="assets/mark.svg" alt="">Twofold</b><span class="proj" id="projName"></span></div>
     <nav class="tabs" id="tabs" aria-label="Sections"></nav>
     <div class="who" id="who"></div>
   </div>
@@ -773,6 +785,7 @@ function render() {
 
 function renderSignIn(main) {
   main.innerHTML = `<div class="panel signin">
+    <picture><source srcset="assets/logo-dark.svg" media="(prefers-color-scheme: dark)"><img src="assets/logo-light.svg" alt="Twofold" width="112" height="112"></picture>
     <h1>Screen abstracts together</h1>
     <p class="muted">Free title and abstract screening for systematic reviews. Each paper is screened blind by two (or more) reviewers, then the lead resolves the conflicts.</p>
     <button class="primary" id="signInBtn">Sign in with Google</button>
