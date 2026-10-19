@@ -287,6 +287,7 @@ function autoMap(header) {
 const FB = {};
 let me = null, authReady = false, fatal = "";
 let myProjects = null;            // home list
+let admins = undefined;           // uids allowed to start reviews; null = site not claimed yet
 let PID = null, P = null;         // open review and its main document
 let subs = [], ownerSubbed = false, revealSub = null, revealTries = 0;
 let R = [], byId = new Map(), loadedChunkV = null;            // lead only: every imported record
@@ -355,10 +356,15 @@ function signOut() { lsSet("twofold-last", ""); history.replaceState(null, "", l
 async function loadProjects() {
   closeProject(); myProjects = null; render();
   try {
+    const a = await FB.getDoc(FB.doc(FB.D, "config", "admins")); admins = a.exists() ? a.data().uids || [] : null;
     const snap = await FB.getDocs(FB.query(ref.projects(), FB.where("emails", "array-contains", me.email)));
     myProjects = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
   } catch (e) { fail(e); myProjects = []; }
   render();
+}
+async function claimSite() {
+  try { await FB.setDoc(FB.doc(FB.D, "config", "admins"), { uids: [me.uid] }); toast("Done. Only you can start reviews on this site."); loadProjects(); }
+  catch (e) { fail(e); loadProjects(); }
 }
 async function createProject(name) {
   const id = FB.doc(ref.projects()).id;
@@ -731,14 +737,18 @@ function renderHome(main) {
           <span class="muted small">${plural((p.emails || []).length, "member")} · ${plural(p.recordCount || 0, "record")}</span>
           ${m.total ? `<span class="row"><span class="bar" style="flex:1"><i style="width:${(100 * (m.done || 0) / m.total).toFixed(1)}%"></i></span><span class="mono small">${m.done || 0}/${m.total}</span></span>` : `<span class="muted small">No papers assigned to you yet</span>`}
         </button>`; }).join("")}</div>`
-      : `<p class="muted">No reviews yet. Start one below, or ask your lead to add <b>${esc(me.email)}</b> to theirs and then reload this page.</p>`}
+      : `<p class="muted">No reviews yet. Ask your lead to add <b>${esc(me.email)}</b> to their review, then reload this page.</p>`}
     </div>
-    <div class="panel"><h3>Start a new review</h3>
+    ${admins === null ? `<div class="panel"><h3>Set up this site</h3>
+      <p class="muted">Nobody runs this site yet. Make yourself its admin so that only you can start reviews. Anyone else who signs in can only join reviews you add them to.</p>
+      <div><button class="primary" id="claimBtn">Make me the admin</button></div></div>`
+    : admins && admins.includes(me.uid) ? `<div class="panel"><h3>Start a new review</h3>
       <p class="muted small">You become the lead: you import the records, invite the team, assign papers and resolve conflicts.</p>
       <form class="row" id="newForm"><input type="text" id="newName" placeholder="Review name, e.g. Early mobilisation after hip fracture" style="flex:1;min-width:220px" required><button class="primary">Create review</button></form>
-    </div></section>`;
+    </div>` : ""}</section>`;
+  const cb = $("#claimBtn"); if (cb) cb.onclick = claimSite;
   main.querySelectorAll("[data-open]").forEach(b => b.onclick = () => openProject(b.dataset.open));
-  $("#newForm").onsubmit = ev => { ev.preventDefault(); const n = $("#newName").value.trim(); if (n) createProject(n); };
+  const nf = $("#newForm"); if (nf) nf.onsubmit = ev => { ev.preventDefault(); const n = $("#newName").value.trim(); if (n) createProject(n); };
 }
 
 /* Records (lead) */

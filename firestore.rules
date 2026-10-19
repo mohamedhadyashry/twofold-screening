@@ -1,6 +1,8 @@
 rules_version = '2';
 
 // Twofold access rules.
+// - Only the site admin(s) can start a review. The first person to sign in claims the site;
+//   more admins can be added later by editing config/admins in the Firebase console.
 // - A review is visible only to the Google accounts whose email the lead added.
 // - Only the lead sees all records, duplicates, the assignment plan and final decisions.
 // - Each reviewer reads only the papers assigned to them and only their own decisions.
@@ -13,10 +15,16 @@ service cloud.firestore {
     function isMember(pid) { return signedIn() && myEmail() in proj(pid).emails; }
     function isOwner(pid) { return signedIn() && proj(pid).owner == request.auth.uid; }
     function revealed(pid) { return proj(pid).blind == false; }
+    function isAdmin() { return signedIn() && request.auth.uid in get(/databases/$(database)/documents/config/admins).data.uids; }
+
+    match /config/admins {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.uids == [request.auth.uid];
+    }
 
     match /projects/{pid} {
       allow read: if signedIn() && myEmail() in resource.data.emails;
-      allow create: if signedIn()
+      allow create: if isAdmin()
         && request.resource.data.owner == request.auth.uid
         && myEmail() in request.resource.data.emails
         && request.resource.data.blind == true;

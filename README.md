@@ -8,7 +8,8 @@ splits the papers between reviewers, and resolves conflicts.
 
 ## What it does
 
-- **Google sign-in** for everyone. A review is visible only to the emails the lead adds.
+- **Google sign-in** for everyone. Only the site admin (the first person to sign in and claim the site)
+  can start reviews; a review is visible only to the emails its lead adds.
 - **CSV import** from PubMed, Scopus, Web of Science, Embase, Rayyan, Zotero or EndNote, with column mapping.
   Several files are merged.
 - **Duplicates**: same DOI, same PMID, identical title or a similar title (spelling variants, small typos).
@@ -39,6 +40,7 @@ splits the papers between reviewers, and resolves conflicts.
 In the `twofold-screening` Firebase project (Google Firestore, free Spark plan). Access is enforced on the
 server by `firestore.rules`:
 
+- only the site admin can start a review (more admins: add their user ID to `config/admins` → `uids` in the Firebase console);
 - only people the lead added can open a review;
 - only the lead sees the full record set, the duplicate decisions, the assignment plan and the final decisions;
 - a reviewer can read only the papers assigned to them and only their own decisions;
